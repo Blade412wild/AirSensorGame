@@ -3,44 +3,46 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+
 public class UDPClientTest : MonoBehaviour
 {
-    private UdpClient udpClient;
-    private Thread receiveThread;
-    private bool running = true;
+    [SerializeField] private int portNum = 9999;
 
-    public int listenPort = 9999;
+    UdpClient udp;
+    Thread thread;
+    bool running = true;
 
     void Start()
     {
-        udpClient = new UdpClient(listenPort);
-        receiveThread = new Thread(new ThreadStart(ReceiveData));
-        receiveThread.IsBackground = true;
-        receiveThread.Start();
-        Debug.Log("UDP Receiver started on port " + listenPort);
+        udp = new UdpClient(portNum);
+        thread = new Thread(ReceiveData); 
+        thread.IsBackground = true;
+        thread.Start();
+        Debug.Log("UDP listening on port " + portNum);
     }
 
     void ReceiveData()
     {
-        IPEndPoint remoteEndPoint = new IPEndPoint(IPAddress.Any, listenPort);
-
+        IPEndPoint ep = new IPEndPoint(IPAddress.Any, 0);
         while (running)
         {
             try
             {
-                byte[] data = udpClient.Receive(ref remoteEndPoint);
-                string message = Encoding.ASCII.GetString(data);
-                Debug.Log("Received: " + message);
+                byte[] data = udp.Receive(ref ep);
+                string msg = Encoding.ASCII.GetString(data);
+                Debug.Log($"Got UDP from {ep.Address}: {msg}");
             }
-            catch { }
+            catch (SocketException e)
+            {
+                Debug.LogWarning("Socket exception: " + e.Message);
+            }
         }
     }
 
     void OnApplicationQuit()
     {
         running = false;
-        if (udpClient != null) udpClient.Close();
-        if (receiveThread != null) receiveThread.Abort();
+        udp?.Close();
+        thread?.Abort();
     }
-
 }
