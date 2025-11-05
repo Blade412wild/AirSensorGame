@@ -2,26 +2,35 @@
 using System.IO.Ports;
 using System.Threading;
 using System;
+using Unity.VisualScripting;
+using JetBrains.Annotations;
 
-public class SerialPortFinder : MonoBehaviour
+public class SerialPortFinder
 {
-    public int baudrate = 9600;
+    public Action<SerialPort> OnSerialPortFound;
+    private int baudrate = 9600;
     private SerialPort serial;
     private bool portFound = false;
 
-    public float portSwitchInterval = 2000f; // ms
-    private float currentTime = 0f;
+    private float portSwitchInterval = 2000f; // ms
     private int COMCounter = 0;
     private string[] availablePorts;
+    private Thread portSearchThread;
 
-    void Start()
+    public SerialPortFinder(int baudRate, float portSwitchInterval)
+    {
+        this.baudrate = baudRate;
+        this.portSwitchInterval = portSwitchInterval;
+        Setup();
+    }
+    void Setup()
     {
         availablePorts = SerialPort.GetPortNames();
         foreach (string portName in availablePorts)
             Debug.Log($"Found port: {portName}");
 
         // Start the search on a separate thread to avoid blocking Unity
-        Thread portSearchThread = new Thread(TryToFindPort);
+        portSearchThread = new Thread(TryToFindPort);
         portSearchThread.Start();
     }
 
@@ -34,7 +43,7 @@ public class SerialPortFinder : MonoBehaviour
 
             if (TryPort(portName))
             {
-                Debug.Log($"✅ Port found: {portName}");
+                Debug.Log($"Port found: {portName}");
                 portFound = true;
                 break;
             }
@@ -53,7 +62,7 @@ public class SerialPortFinder : MonoBehaviour
         {
             using (SerialPort sp = new SerialPort(portName, baudrate))
             {
-                sp.ReadTimeout = 500; // ms
+                sp.ReadTimeout = 20; // ms
                 sp.Open();
 
                 try
@@ -64,6 +73,7 @@ public class SerialPortFinder : MonoBehaviour
                     if (line.Trim() == "1")
                     {
                         sp.Write("1");
+                        OnSerialPortFound?.Invoke(sp);
                         return true;
                     }
                 }
@@ -75,12 +85,20 @@ public class SerialPortFinder : MonoBehaviour
                 sp.Close();
             }
         }
-        catch (System.Exception ex)
+        catch (Exception ex)
         {
             Debug.LogWarning($"Failed to open {portName}: {ex.Message}");
         }
 
         return false;
     }
+
+    public void OnDisable()
+    {
+        portSearchThread.Abort();
+    }
+
+
+    
 }
 
