@@ -1,46 +1,49 @@
 ﻿using System;
+using System.Security.Cryptography;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class MessageParser : MonoBehaviour
+public class MessageParser
 {
-    string message = "";
-    string varDevider = "|";
-    string valueDevider = ":";
-    string typeDevider = "/";
+    private static string varDevider = "|";
+    private static string valueDevider = ":";
+    private static string typeDevider = "/";
 
-
-    public void Awake()
+    public static void ParseMessage(string message, BreathingDeviceData datacontainer)
     {
-        DateTime now = DateTime.Now;
-        message = "Velocity:10/f|Temperature:32/i|ademIn:0/b";
-
-        Debug.Log(message);
         string[] messageParts = message.Split(varDevider);
+
         foreach (string messagePart in messageParts)
         {
+            if (messagePart == "") continue;
+
+            string[] variables = messagePart.Split(valueDevider);
+            //string[] vars = variable.Split(valueDevider);
+            SetBreathingData(variables[0], variables[1], datacontainer);
+        }
+        
+    }
+    public static void ParseMessage2(string message, BreathingDeviceData datacontainer)
+    {
+        DateTime now = DateTime.Now;
+
+        //Debug.Log(message);
+        string[] messageParts = message.Split(varDevider);
+
+        foreach (string messagePart in messageParts)
+        {
+
+
             //Debug.Log(messagePart);
             string[] types = messagePart.Split(typeDevider);
-            for (int i = 0; i < types.Length; i++)
+            for (int i = 1; i >= 0; i--)
             {
-                //Debug.Log(types[i]);
-
                 if (i == 0)
                 {
                     string[] vars = types[i].Split(valueDevider);
-                    Debug.Log("Name : " + vars[0]);
-                    Debug.Log("value : " + vars[1]);
-
+                    SetBreathingData(vars[0], vars[1], datacontainer);
                 }
-
-                if (i == 1)
-                {
-                    Debug.Log(" type = " + types[i]);
-                }
-
             }
-
-
         }
 
         DateTime end = DateTime.Now;
@@ -48,5 +51,16 @@ public class MessageParser : MonoBehaviour
         Debug.Log("timepassed = " + timeSpan.TotalMilliseconds);
 
     }
-}
 
+
+    private static void SetBreathingData(string name, string value, BreathingDeviceData datacontainer) // to do create a non string based parser.
+    {
+        switch (name)
+        {
+            case BreathingDeviceData.AirVelocityName: datacontainer.AirVelocity = float.Parse(value); break;
+            case BreathingDeviceData.inExhaleSpeedName: datacontainer.inExhaleSpeed = float.Parse(value); break;
+            case BreathingDeviceData.BreathingStateName: datacontainer.BreathingState = (BreathingDeviceData.breathingState)int.Parse(value); break;
+            case BreathingDeviceData.ExHalingThroughNoseName: datacontainer.ExHalingThroughNose = bool.Parse(value); break;
+        }
+    }
+}

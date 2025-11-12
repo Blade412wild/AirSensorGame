@@ -829,8 +829,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MicrocontrollerManager
   test: 0
-  message: AirVelocity:10.0
-  parse: 0
+  message: 
+  parse: 1
   baudrate: 9600
   portSwitchInterval: 250
 --- !u!1 &1710004272
