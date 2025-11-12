@@ -72,7 +72,7 @@ public class MicrocontrollerManager : MonoBehaviour
         OpenMicrocontrollerThread();
     }
 
-    
+
 
     private void HandleMicrocontrollerInput()
     {
@@ -86,19 +86,44 @@ public class MicrocontrollerManager : MonoBehaviour
         {
             Debug.Log(" microcontrollerPort was already opened");
 
+
         }
+
+        DateTime TryReadMessage = DateTime.Now;
+        DateTime lastTimeMessageRead = DateTime.Now;
 
         while (tryReadingData)
         {
             try
             {
-                string message = SerialPort.ReadLine();
-                Debug.Log("message");
+                TryReadMessage = DateTime.Now;
+
+                string message = SerialPort.ReadLine()?.Trim();
+
+                if (message.Contains("1"))
+                {
+                    SerialPort.Write("1");
+                    continue;
+                }
+
+                if (!string.IsNullOrEmpty(message))
+                {
+                    Debug.Log(message);
+                    TimeSpan timeSpan = TryReadMessage - lastTimeMessageRead;
+                    lastTimeMessageRead = DateTime.Now;
+
+                    Debug.Log("timeBetween read messages : " + timeSpan.TotalMilliseconds + " ms");
+                }
+                else
+                {
+                    Debug.Log("-");
+                }
+
 
             }
             catch (TimeoutException ex)
             {
-                Debug.Log("caught timeoutExepction");
+                //Debug.Log("caught timeoutExepction");
             }
 
         }

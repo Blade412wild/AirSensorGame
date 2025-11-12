@@ -70,7 +70,7 @@ public class SerialPortFinder
                     {
                         Debug.Log($"✅ Connection found on {portName}");
                         portFound = true;
-                        serial.Write("1");
+                        //serial.Write("1");
                         serial.Close();
                         OnSerialPortFound?.Invoke(serial);
                         return true;
