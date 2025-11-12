@@ -1,72 +1,84 @@
 ﻿using UnityEngine;
+using System;
 using System.IO.Ports;
 using System.Threading;
-using System;
-using Unity.VisualScripting;
-using JetBrains.Annotations;
-using static UnityEngine.Rendering.DebugUI.Table;
 
 public class SerialPortFinder
 {
     public Action<SerialPort> OnSerialPortFound;
-    private int baudrate = 9600;
+
+    private int baudrate;
     private SerialPort serial;
     private bool portFound = false;
-
-    private float portSwitchInterval = 2000f; // ms
-    private int COMCounter = 0;
+    private bool stopThread = false;
     private string[] availablePorts;
     private Thread portSearchThread;
 
-    public SerialPortFinder(int baudRate, float portSwitchInterval)
+    public SerialPortFinder(int baudRate, float interval)
     {
-        this.baudrate = baudRate;
-        this.portSwitchInterval = portSwitchInterval;
+        baudrate = baudRate;
         Setup();
     }
+
     void Setup()
     {
         availablePorts = SerialPort.GetPortNames();
-        foreach (string portName in availablePorts)
-            Debug.Log($"Found port: {portName}");
+        foreach (var p in availablePorts)
+            Debug.Log($"Found port: {p}");
 
-        // Start the search on a separate thread to avoid blocking Unity
         portSearchThread = new Thread(TryToFindPort);
         portSearchThread.Start();
     }
 
     private void TryToFindPort()
     {
-        while (!portFound && COMCounter < availablePorts.Length)
+        foreach (string portName in availablePorts)
         {
-            string portName = availablePorts[COMCounter];
+            if (stopThread || portFound) break;
 
-            Debug.Log("----------");
-            TryPortOpeningPort(portName);
-            serial.Close();
+            Debug.Log($"Trying {portName}...");
+            if (TryOpenPort(portName))
+                break;
 
-            COMCounter++;
-            //Thread.Sleep((int)portSwitchInterval); // wait before next try
+            Thread.Sleep(200);
         }
 
         if (!portFound)
             Debug.LogWarning("No valid COM port found!");
     }
 
-    private bool TryPortOpeningPort(string portName)
+    private bool TryOpenPort(string portName)
     {
-        Debug.Log("Try Opening " + portName + "...");
         try
         {
-            using (serial = new SerialPort(portName, baudrate))
+            serial = new SerialPort(portName, baudrate)
             {
-                serial.ReadTimeout = 20;
-                serial.Open();
+                ReadTimeout = 50,
+                NewLine = "\n"
+            };
+            serial.Open();
+            Debug.Log($"Opened {portName}");
 
-                Debug.Log("Opening Port : Succes");
-
-                TryReadingData(serial);
+            DateTime start = DateTime.Now;
+            while ((DateTime.Now - start).TotalMilliseconds < 2000 && !stopThread)
+            {
+                try
+                {
+                    string data = serial.ReadExisting();
+                    if (data.Contains("1"))
+                    {
+                        Debug.Log($"✅ Connection found on {portName}");
+                        portFound = true;
+                        serial.Write("1");
+                        OnSerialPortFound?.Invoke(serial);
+                        return true;
+                    }
+                }
+                catch (TimeoutException) { }
+                Thread.Sleep(10);
             }
+
+            serial.Close();
         }
         catch (Exception ex)
         {
@@ -76,58 +88,10 @@ public class SerialPortFinder
         return false;
     }
 
-    public void TryReadingData(SerialPort serial)
-    {
-        DateTime start = DateTime.Now;
-        int milliSecondesPassed = 0;
-        Debug.Log("Try Reading " + serial.PortName);
-
-        while (milliSecondesPassed <= 200)
-        {
-            Debug.Log(milliSecondesPassed);
-
-            try
-            {
-                string message = serial.ReadLine();
-                Debug.Log(message);
-
-                int.TryParse(message, out int connectionToken);
-                if (connectionToken == 1)
-                {
-                    Debug.Log("Connection is made");
-                    serial.Write("1");
-                    portFound = true;
-                    break;
-
-                }
-
-            }
-            catch (TimeoutException)
-            {
-                Debug.Log($"{serial.PortName} Couldn't read data");
-            }
-
-            DateTime end = DateTime.Now;
-            TimeSpan timespan = end - start;
-            milliSecondesPassed += (int)(end - start).TotalMilliseconds;
-
-        }
-
-
-
-
-    }
-
     public void OnDisable()
     {
-        if (serial != null)
+        stopThread = true;
+        if (serial?.IsOpen == true)
             serial.Close();
-
-        if (portSearchThread.IsAlive)
-            portSearchThread.Abort();
     }
-
-
-
 }
-
