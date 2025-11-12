@@ -780,6 +780,7 @@ GameObject:
   - component: {fileID: 1705296455}
   - component: {fileID: 1705296454}
   - component: {fileID: 1705296456}
+  - component: {fileID: 1705296457}
   m_Layer: 0
   m_Name: AruinoController
   m_TagString: Untagged
@@ -833,6 +834,20 @@ MonoBehaviour:
   parse: 0
   baudrate: 9600
   portSwitchInterval: 250
+--- !u!114 &1705296457
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1705296453}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7426fbb15ef0f524eb3dc265a220f4d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SerialPortFinder2
+  Index: 0
+  SetSerial: 0
 --- !u!1 &1710004272
 GameObject:
   m_ObjectHideFlags: 0

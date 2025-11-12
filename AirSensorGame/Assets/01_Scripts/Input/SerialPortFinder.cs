@@ -32,12 +32,13 @@ public class SerialPortFinder
 
     private void TryToFindPort()
     {
-        foreach (string portName in availablePorts)
+
+        for (int i = availablePorts.Length - 1; i >= 0; i--)
         {
             if (stopThread || portFound) break;
 
-            Debug.Log($"Trying {portName}...");
-            if (TryOpenPort(portName))
+            Debug.Log($"Trying {availablePorts[i]}....");
+            if (TryOpenPort(availablePorts[i]))
                 break;
 
             Thread.Sleep(200);
@@ -64,12 +65,13 @@ public class SerialPortFinder
             {
                 try
                 {
-                    string data = serial.ReadExisting();
+                    string data = serial.ReadLine();
                     if (data.Contains("1"))
                     {
                         Debug.Log($"✅ Connection found on {portName}");
                         portFound = true;
                         serial.Write("1");
+                        serial.Close();
                         OnSerialPortFound?.Invoke(serial);
                         return true;
                     }

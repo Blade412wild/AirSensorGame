@@ -1,4 +1,5 @@
-﻿using System.IO.Ports;
+﻿using System;
+using System.IO.Ports;
 using System.Threading;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -17,6 +18,7 @@ public class MicrocontrollerManager : MonoBehaviour
     private SerialPortFinder portFinder;
     private BreathingDeviceData dataContainer;
     private Thread microControllerThread;
+    private bool tryReadingData = false;
 
     public void Awake()
     {
@@ -57,27 +59,75 @@ public class MicrocontrollerManager : MonoBehaviour
         SerialPort = serialPort;
         SerialPortIsOpen = true;
 
-        if (microControllerThread.IsAlive)
+        if (microControllerThread != null)
         {
-            microControllerThread.Abort();
+            if (microControllerThread.IsAlive)
+            {
+                microControllerThread.Join();
+            }
+
         }
-        microControllerThread = new Thread(HandleMicrocontrollerInput);
+
+        Debug.Log("Starthandeling incomming messages");
+        OpenMicrocontrollerThread();
     }
+
+    
 
     private void HandleMicrocontrollerInput()
     {
-        string message = SerialPort.ReadLine();
+        if (!SerialPort.IsOpen)
+        {
+            SerialPort.ReadTimeout = 10;
+            SerialPort.Open();
+            Debug.Log("Opened microcontrollerPort");
+        }
+        else
+        {
+            Debug.Log(" microcontrollerPort was already opened");
 
-        //if (message == "") return;
-        Debug.Log("message : " + message);
+        }
+
+        while (tryReadingData)
+        {
+            try
+            {
+                string message = SerialPort.ReadLine();
+                Debug.Log("message");
+
+            }
+            catch (TimeoutException ex)
+            {
+                Debug.Log("caught timeoutExepction");
+            }
+
+        }
+    }
+
+    private void OpenMicrocontrollerThread()
+    {
+        CloseMicrocontrollerThread();
+
+        microControllerThread = new Thread(HandleMicrocontrollerInput);
+        tryReadingData = true;
+        microControllerThread.Start();
+    }
+
+    private void CloseMicrocontrollerThread()
+    {
+        if (microControllerThread != null && microControllerThread.IsAlive)
+        {
+            tryReadingData = false;
+            microControllerThread.Join();
+        }
+
     }
 
     private void OnDisable()
     {
-        if (microControllerThread != null && microControllerThread.IsAlive)
-            microControllerThread.Abort();
+        CloseMicrocontrollerThread();
 
-        if(portFinder != null)
+        if (portFinder != null)
         {
             portFinder.OnDisable();
         }
