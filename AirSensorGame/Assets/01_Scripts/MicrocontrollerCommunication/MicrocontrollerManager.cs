@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO.Ports;
 using System.Threading;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class MicrocontrollerManager : MonoBehaviour
@@ -16,13 +15,12 @@ public class MicrocontrollerManager : MonoBehaviour
     [SerializeField] private int baudrate = 9600;
     [SerializeField] private float portSwitchInterval = 250; // ms
     private SerialPortFinder portFinder;
-    private BreathingDeviceData dataContainer;
     private Thread microControllerThread;
     private bool tryReadingData = false;
 
     public void Awake()
     {
-        dataContainer = new BreathingDeviceData();
+
     }
 
     private void Update()
@@ -31,7 +29,7 @@ public class MicrocontrollerManager : MonoBehaviour
 
         if (parse)
         {
-            MessageParser.ParseMessage(message, dataContainer);
+            MessageParser.ParseMessage(message);
             parse = false;
         }
 
@@ -72,8 +70,6 @@ public class MicrocontrollerManager : MonoBehaviour
         OpenMicrocontrollerThread();
     }
 
-
-
     private void HandleMicrocontrollerInput()
     {
         if (!SerialPort.IsOpen)
@@ -85,8 +81,6 @@ public class MicrocontrollerManager : MonoBehaviour
         else
         {
             Debug.Log(" microcontrollerPort was already opened");
-
-
         }
 
         DateTime TryReadMessage = DateTime.Now;
