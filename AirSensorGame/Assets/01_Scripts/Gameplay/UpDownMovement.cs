@@ -1,9 +1,12 @@
 ﻿using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Windows;
 
 public class UpDownMovement : MonoBehaviour
 {
     [SerializeField] private InputActionReference spaceBarValue;
+    [SerializeField] private InputActionReference wasdMovementAction;
+    [SerializeField] private float speedScalar = 7;
     [SerializeField] private Transform MaxTrans;
     [SerializeField] private Transform MinTrans;
 
@@ -27,15 +30,22 @@ public class UpDownMovement : MonoBehaviour
     bool reachedMin;
     bool reachedMax;
     float acceleration = -9.81f;
-    Vector3 velocity;
     Vector3 gravity = new Vector3(0, -9.81f, 0);
-    Vector3 upForce = new Vector3(0, 12, 0);
+    Vector3 UpForce = new Vector3(0, 12, 0);
+
+    Vector3 xAxisVelocity = new Vector3(0, 0, 0);
+    Vector3 yAxisVelocity = new Vector3(0, 0, 0);
+    Vector3 velocity;
+
+    Vector2 keyInput;
 
     private void Start()
     {
         transform = GetComponent<Transform>();
         startPos = transform.position;
         spaceBarValue.action.Enable();
+        wasdMovementAction.action.Enable();
+
 
     }
 
@@ -60,6 +70,9 @@ public class UpDownMovement : MonoBehaviour
             reachedMin = false;
             reachedMax = false;
         }
+
+        keyInput = wasdMovementAction.action.ReadValue<Vector2>();
+        
 
         //if (spaceBarValue.action.IsPressed())
         //{
@@ -100,7 +113,7 @@ public class UpDownMovement : MonoBehaviour
             transform.position = startPos;
         }
 
-
+        SetXaxisVelocity();
 
         if (!reachedMin)
         {
@@ -111,18 +124,26 @@ public class UpDownMovement : MonoBehaviour
         {
             CalculateNewPosWithBoost();
         }
+
+        velocity = yAxisVelocity + xAxisVelocity;
+        transform.position += velocity;
     }
 
     private void CalculateNewPosWithGravity()
     {
-        velocity += gravity * Mathf.Pow(Time.deltaTime, 2);
-        transform.position += velocity;
+        yAxisVelocity += gravity * Mathf.Pow(Time.deltaTime, 2);
+        //yAxisVelocity += velocity;
     }
 
     private void CalculateNewPosWithBoost()
     {
-        velocity += upForce * Mathf.Pow(Time.deltaTime, 2);
-        transform.position += velocity;
+        yAxisVelocity += UpForce * Mathf.Pow(Time.deltaTime, 2);
+        //yAxisVelocity += velocity;
+    }
+
+    private void SetXaxisVelocity()
+    {
+        xAxisVelocity = (keyInput * speedScalar) * Time.deltaTime;
     }
 
     private void SetUpForce()
@@ -131,11 +152,11 @@ public class UpDownMovement : MonoBehaviour
         if (useSensor)
         {
             airvelocity = data.AirVelocity;
-            upForce.y = airvelocity;
+            UpForce.y = airvelocity;
         }
         else
         {
-            upForce.y = airvelocity;
+            UpForce.y = airvelocity;
         }
 
         if (airvelocity > 0)

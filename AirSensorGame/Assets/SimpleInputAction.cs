@@ -100,6 +100,15 @@ public partial class @SimpleInputAction: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""LEFTRight"",
+                    ""type"": ""Value"",
+                    ""id"": ""5874fc83-3230-4768-a005-eb2ef22b3408"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -113,6 +122,72 @@ public partial class @SimpleInputAction: IInputActionCollection2, IDisposable
                     ""action"": ""SpaceBar"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""2D Vector"",
+                    ""id"": ""446fa4d4-7b9a-4592-aa62-e4ed2d456587"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LEFTRight"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""0260dadb-717f-4f65-8369-6db0b05dcf00"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LEFTRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""a0ee96d3-19ce-42be-8dc2-55772bf7a22d"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LEFTRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""2D Vector"",
+                    ""id"": ""63b306cd-2bfb-463c-a62e-ba37aa003d46"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LEFTRight"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""e982ec2f-f1da-4a7d-a5a2-26122d943ee2"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LEFTRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""961afa1d-8967-4887-846c-4b2a304dde11"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LEFTRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         }
@@ -122,6 +197,7 @@ public partial class @SimpleInputAction: IInputActionCollection2, IDisposable
         // Laptop
         m_Laptop = asset.FindActionMap("Laptop", throwIfNotFound: true);
         m_Laptop_SpaceBar = m_Laptop.FindAction("SpaceBar", throwIfNotFound: true);
+        m_Laptop_LEFTRight = m_Laptop.FindAction("LEFTRight", throwIfNotFound: true);
     }
 
     ~@SimpleInputAction()
@@ -203,6 +279,7 @@ public partial class @SimpleInputAction: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_Laptop;
     private List<ILaptopActions> m_LaptopActionsCallbackInterfaces = new List<ILaptopActions>();
     private readonly InputAction m_Laptop_SpaceBar;
+    private readonly InputAction m_Laptop_LEFTRight;
     /// <summary>
     /// Provides access to input actions defined in input action map "Laptop".
     /// </summary>
@@ -218,6 +295,10 @@ public partial class @SimpleInputAction: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Laptop/SpaceBar".
         /// </summary>
         public InputAction @SpaceBar => m_Wrapper.m_Laptop_SpaceBar;
+        /// <summary>
+        /// Provides access to the underlying input action "Laptop/LEFTRight".
+        /// </summary>
+        public InputAction @LEFTRight => m_Wrapper.m_Laptop_LEFTRight;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -247,6 +328,9 @@ public partial class @SimpleInputAction: IInputActionCollection2, IDisposable
             @SpaceBar.started += instance.OnSpaceBar;
             @SpaceBar.performed += instance.OnSpaceBar;
             @SpaceBar.canceled += instance.OnSpaceBar;
+            @LEFTRight.started += instance.OnLEFTRight;
+            @LEFTRight.performed += instance.OnLEFTRight;
+            @LEFTRight.canceled += instance.OnLEFTRight;
         }
 
         /// <summary>
@@ -261,6 +345,9 @@ public partial class @SimpleInputAction: IInputActionCollection2, IDisposable
             @SpaceBar.started -= instance.OnSpaceBar;
             @SpaceBar.performed -= instance.OnSpaceBar;
             @SpaceBar.canceled -= instance.OnSpaceBar;
+            @LEFTRight.started -= instance.OnLEFTRight;
+            @LEFTRight.performed -= instance.OnLEFTRight;
+            @LEFTRight.canceled -= instance.OnLEFTRight;
         }
 
         /// <summary>
@@ -308,5 +395,12 @@ public partial class @SimpleInputAction: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnSpaceBar(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "LEFTRight" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnLEFTRight(InputAction.CallbackContext context);
     }
 }
