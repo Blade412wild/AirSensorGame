@@ -769,50 +769,6 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
---- !u!1 &1329866499
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1329866501}
-  - component: {fileID: 1329866500}
-  m_Layer: 0
-  m_Name: BreathingDeviceparserList
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1329866500
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1329866499}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f57d23e6325bd154da3234981ba67d9f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BreathingDeviceCommmunicationParserList
---- !u!4 &1329866501
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1329866499}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.26143, y: 0, z: 1.91126}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1705296453
 GameObject:
   m_ObjectHideFlags: 0
@@ -878,6 +834,8 @@ MonoBehaviour:
   parse: 0
   baudrate: 9600
   portSwitchInterval: 250
+  parserList: {fileID: 11400000, guid: 709e4d28c285db847872a475dc6aae58, type: 2}
+  data: {fileID: 11400000, guid: 498a36565005e3c4b911dae74f30ddce, type: 2}
 --- !u!114 &1705296457
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -984,6 +942,7 @@ GameObject:
   - component: {fileID: 1737411121}
   - component: {fileID: 1737411120}
   - component: {fileID: 1737411119}
+  - component: {fileID: 1737411124}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -1005,6 +964,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   speed: 180
   numbers: 
+  times:
+    list:
+    - key: 0
+      value: hallo
+      duplicatedKey: 0
+    - key: 1
+      value: Test
+      duplicatedKey: 0
+    - key: 2
+      value: check
+      duplicatedKey: 0
 --- !u!65 &1737411120
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1097,6 +1067,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1737411124
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1737411118}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81d5fbe8ef5bd9847b24d92937fbcb8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::dataactionTest
+  parserList: {fileID: 11400000, guid: 709e4d28c285db847872a475dc6aae58, type: 2}
 --- !u!1 &1874537000
 GameObject:
   m_ObjectHideFlags: 0
@@ -1671,4 +1654,3 @@ SceneRoots:
   - {fileID: 1710004275}
   - {fileID: 1705296455}
   - {fileID: 1737411123}
-  - {fileID: 1329866501}

@@ -8,30 +8,27 @@ public class MicrocontrollerManager : MonoBehaviour
     public bool test;
     public string message;
     public bool parse;
-    public SerialPort SerialPort { get; private set; }
+    public static SerialPort SerialPort { get; private set; }
 
     public bool SerialPortIsOpen { get; private set; }
 
     [SerializeField] private int baudrate = 9600;
     [SerializeField] private float portSwitchInterval = 250; // ms
+    [SerializeField] private BreathingDeviceCommmunicationParserList parserList;
+    [SerializeField] private BreathingDeviceData data;
+
     private SerialPortFinder portFinder;
     private Thread microControllerThread;
+    private MessageParser messageParser;
     private bool tryReadingData = false;
 
     public void Awake()
     {
-
+        messageParser = new MessageParser(parserList);
     }
 
     private void Update()
     {
-        //Debug.Log("Airvelocity : " + dataContainer.AirVelocity);
-
-        if (parse)
-        {
-            MessageParser.ParseMessage(message);
-            parse = false;
-        }
 
         if (test)
         {
@@ -94,23 +91,15 @@ public class MicrocontrollerManager : MonoBehaviour
 
                 string message = SerialPort.ReadLine()?.Trim();
 
-                if (message.Contains("1"))
-                {
-                    SerialPort.Write("1");
-                    continue;
-                }
-
                 if (!string.IsNullOrEmpty(message))
                 {
-                    Debug.Log(message);
-                    TimeSpan timeSpan = TryReadMessage - lastTimeMessageRead;
-                    lastTimeMessageRead = DateTime.Now;
+                    //Debug.Log(message);
+                    //TimeSpan timeSpan = TryReadMessage - lastTimeMessageRead;
+                    //lastTimeMessageRead = DateTime.Now;
 
-                    Debug.Log("timeBetween read messages : " + timeSpan.TotalMilliseconds + " ms");
-                }
-                else
-                {
-                    Debug.Log("-");
+                    //Debug.Log("timeBetween read messages : " + timeSpan.TotalMilliseconds + " ms");
+
+                    messageParser.ParseMessage(message);
                 }
 
 
