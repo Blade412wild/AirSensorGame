@@ -1,0 +1,35 @@
+{
+    "version": 1,
+    "name": "SimpleInputAction",
+    "maps": [
+        {
+            "name": "Laptop",
+            "id": "ddd362b7-cede-4492-a9f1-da8126363a75",
+            "actions": [
+                {
+                    "name": "SpaceBar",
+                    "type": "Button",
+                    "id": "48dd4f6d-52e4-47cb-8651-c4918f916fe3",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "c3194b19-b19b-4ead-847f-12a03aa0cd28",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "SpaceBar",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

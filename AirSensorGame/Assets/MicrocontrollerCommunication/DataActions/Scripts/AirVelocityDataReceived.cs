@@ -7,6 +7,7 @@ public class AirVelocityDataReceived : DataAction
         try
         {
             data.AirVelocity = float.Parse(value);
+            //Debug.Log("airvelocity : " + data.AirVelocity + " ms");
 
         }
         catch (System.Exception ex)
