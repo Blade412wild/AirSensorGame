@@ -1,0 +1,46 @@
+using System;
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+public class PrototypeGameManager : MonoBehaviour
+{
+    public event Action PlayerDead;
+    public event Action<sbyte> PlayerHealthChanged;
+    public event Action PlayerCompletedTutorial;
+    public event Action PlayerStartedGame;
+    public event Action<sbyte> ScoreChanged;
+
+
+    [SerializeField] private InputActionReference startlevelAction;
+    [SerializeField] private MicrocontrollerManager microcontrollerManager;
+    [SerializeField] private MovingLevel levelMoving;
+    [SerializeField] private GameUIManager uimanager;
+
+
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
+        startlevelAction.action.Enable();
+        startlevelAction.action.started += StartGame;
+        CheckMicorControllerStatus();
+    }
+
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
+    private void StartGame(InputAction.CallbackContext obj)
+    {
+        startlevelAction.action.started -= StartGame;
+        PlayerStartedGame?.Invoke();
+    }
+
+    private void CheckMicorControllerStatus()
+    {
+        if (microcontrollerManager.IsConnected()) return;
+        microcontrollerManager.TryToConnect = true; //TODO laat de microcontroller in zijn eigen scene zijn
+    }
+
+}

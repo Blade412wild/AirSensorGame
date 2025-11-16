@@ -5,7 +5,9 @@ using UnityEngine;
 
 public class MicrocontrollerManager : MonoBehaviour
 {
-    public bool test;
+
+
+    public bool TryToConnect;
     public string message;
     public bool parse;
     public static SerialPort SerialPort { get; private set; }
@@ -30,10 +32,10 @@ public class MicrocontrollerManager : MonoBehaviour
     private void Update()
     {
 
-        if (test)
+        if (TryToConnect)
         {
             TryToFindNewPort();
-            test = false;
+            TryToConnect = false;
         }
     }
 
@@ -48,6 +50,12 @@ public class MicrocontrollerManager : MonoBehaviour
         portFinder = new SerialPortFinder(baudrate, portSwitchInterval);
         portFinder.OnSerialPortFound += OnSerialPortFounded;
 
+    }
+
+    public bool IsConnected()
+    {
+        if (SerialPort != null && SerialPortIsOpen) return true;
+        return false;
     }
     private void OnSerialPortFounded(SerialPort serialPort)
     {

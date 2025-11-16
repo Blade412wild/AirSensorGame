@@ -1,9 +1,12 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEditor.Build.Content;
+using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Windows;
 
-public class UpDownMovement : MonoBehaviour
+public class PlayerMovement : MonoBehaviour
 {
+    [SerializeField] private PrototypeGameManager gameManager;
     [SerializeField] private InputActionReference spaceBarValue;
     [SerializeField] private InputActionReference wasdMovementAction;
     [SerializeField] private float speedScalar = 7;
@@ -12,32 +15,33 @@ public class UpDownMovement : MonoBehaviour
 
     [SerializeField] private BreathingDeviceData data;
 
-    private Transform transform;
 
-    public bool isblowing;
-    public bool useSensor;
-    public bool reset;
+    [SerializeField] private bool useSensor;
 
     [Space]
-    [Range(0, 15)] public float airvelocity;
+    [SerializeField]
+    [Range(0, 15)]
+    private float airvelocity;
 
     private Vector3 max => MaxTrans.position;
     private Vector3 min => MinTrans.position;
 
+    private Transform transform;
     private Vector3 startPos;
 
-    bool isFalling;
-    bool reachedMin;
-    bool reachedMax;
-    float acceleration = -9.81f;
-    Vector3 gravity = new Vector3(0, -9.81f, 0);
-    Vector3 UpForce = new Vector3(0, 12, 0);
+    private Vector3 gravity = new Vector3(0, -9.81f, 0);
+    private Vector3 UpForce = new Vector3(0, 12, 0);
 
-    Vector3 xAxisVelocity = new Vector3(0, 0, 0);
-    Vector3 yAxisVelocity = new Vector3(0, 0, 0);
-    Vector3 velocity;
+    private Vector3 xAxisVelocity = new Vector3(0, 0, 0);
+    private Vector3 yAxisVelocity = new Vector3(0, 0, 0);
+    private Vector3 velocity;
 
-    Vector2 keyInput;
+    private Vector2 keyInput;
+
+    private bool isblowing;
+    private bool reachedMin;
+    private bool reachedMax;
+    private bool mayMove;
 
     private void Start()
     {
@@ -45,12 +49,14 @@ public class UpDownMovement : MonoBehaviour
         startPos = transform.position;
         spaceBarValue.action.Enable();
         wasdMovementAction.action.Enable();
-
-
+        gameManager.PlayerStartedGame += HandlePlayerStartedGameEvent;
     }
+
 
     private void Update()
     {
+        if (!mayMove) return;
+
         SetUpForce();
         if (transform.position.y >= max.y)
         {
@@ -72,16 +78,6 @@ public class UpDownMovement : MonoBehaviour
         }
 
         keyInput = wasdMovementAction.action.ReadValue<Vector2>();
-        
-
-        //if (spaceBarValue.action.IsPressed())
-        //{
-        //    isblowing = true;
-        //}
-        //else
-        //{
-        //    isblowing = false;
-        //}
 
         if (data.AirVelocity > 0 || isblowing)
         {
@@ -106,12 +102,8 @@ public class UpDownMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (reset)
-        {
-            reset = false;
-            velocity = Vector3.zero;
-            transform.position = startPos;
-        }
+        if (!mayMove) return;
+
 
         SetXaxisVelocity();
 
@@ -167,6 +159,10 @@ public class UpDownMovement : MonoBehaviour
         {
             isblowing = false;
         }
+    }
+    private void HandlePlayerStartedGameEvent()
+    {
+        mayMove = true;
     }
 
 
