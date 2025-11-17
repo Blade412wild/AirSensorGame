@@ -35,8 +35,10 @@ public class PrototypeGameManager : MonoBehaviour
         CheckMicorControllerStatus();
         ExitFirstRoomTrigger.TriggerEvent += HandlePlayerExitFirstRoom;
         player.PlayerHit += HandlePlayerHitEvent;
-        player.PlayerDied += HandplePlayerDeathEvent;
+        player.PlayerDied += HandlePlayerDeathEvent;
         scoreManager.ScoreChangeEvent += (x) => ScoreChanged?.Invoke(x);
+
+        ResetLevelEvent += ResetLevel;
 
     }
 
@@ -46,7 +48,6 @@ public class PrototypeGameManager : MonoBehaviour
         if (Reset)
         {
             Reset = false;
-            ResetLevel();
             ResetLevelEvent?.Invoke();
         }
     }
@@ -69,9 +70,11 @@ public class PrototypeGameManager : MonoBehaviour
 
     }
 
-    private void HandplePlayerDeathEvent()
+    private void HandlePlayerDeathEvent()
     {
         PlayerHealthChanged?.Invoke(0);
+        ResetLevelEvent?.Invoke();
+
     }
 
     private void HandlePlayerHitEvent(sbyte health)
@@ -91,7 +94,7 @@ public class PrototypeGameManager : MonoBehaviour
     {
         scoreManager.ScoreChangeEvent -= (x) => ScoreChanged?.Invoke(x);
         player.PlayerHit -= HandlePlayerHitEvent;
-        player.PlayerDied -= HandplePlayerDeathEvent;
+        player.PlayerDied -= HandlePlayerDeathEvent;
 
     }
 
