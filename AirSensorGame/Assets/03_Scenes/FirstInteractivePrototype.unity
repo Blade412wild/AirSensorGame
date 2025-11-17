@@ -131,11 +131,11 @@ GameObject:
   - component: {fileID: 17806091}
   - component: {fileID: 17806090}
   - component: {fileID: 17806089}
+  - component: {fileID: 17806095}
   - component: {fileID: 17806088}
   - component: {fileID: 17806093}
   - component: {fileID: 17806094}
   - component: {fileID: 17806096}
-  - component: {fileID: 17806095}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -321,7 +321,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3215c9ce36f13445bc2733f1ee102ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  gameManager: {fileID: 1299125815}
   healthSystem: {fileID: 17806096}
+  movement: {fileID: 17806088}
   animator: {fileID: 17806094}
 --- !u!114 &17806096
 MonoBehaviour:
@@ -346,7 +348,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 41008008}
-  - component: {fileID: 41008009}
   m_Layer: 0
   m_Name: Diamonds
   m_TagString: Untagged
@@ -372,22 +373,6 @@ Transform:
   - {fileID: 198722883}
   m_Father: {fileID: 2074019851}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &41008009
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 41008007}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 819f63b80bff14b4fb575476dd6135be, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  scoringTriggers:
-  - {fileID: 1231019636}
-  - {fileID: 413250734}
-  - {fileID: 198722885}
 --- !u!1 &61413033
 GameObject:
   m_ObjectHideFlags: 0
@@ -2246,6 +2231,55 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 720169197}
   m_CullTransparentMesh: 1
+--- !u!1 &826450435
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 826450437}
+  - component: {fileID: 826450436}
+  m_Layer: 0
+  m_Name: SCore Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &826450436
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 826450435}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 819f63b80bff14b4fb575476dd6135be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  gameManager: {fileID: 1299125815}
+  scoringTriggers:
+  - {fileID: 1231019636}
+  - {fileID: 413250734}
+  - {fileID: 198722885}
+--- !u!4 &826450437
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 826450435}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &913241387
 GameObject:
   m_ObjectHideFlags: 0
@@ -3374,10 +3408,11 @@ MonoBehaviour:
   startlevelAction: {fileID: -1573184785702925125, guid: 3730a722012a3f143a52d04a494c8e49, type: 3}
   microcontrollerManager: {fileID: 1563588182}
   levelMoving: {fileID: 2074019852}
-  uimanager: {fileID: 1661163901}
+  uiManager: {fileID: 1661163901}
   player: {fileID: 17806095}
-  scoreManager: {fileID: 41008009}
+  scoreManager: {fileID: 826450436}
   ExitFirstRoomTrigger: {fileID: 1117743282}
+  Reset: 0
 --- !u!4 &1299125816
 Transform:
   m_ObjectHideFlags: 0
@@ -5537,6 +5572,7 @@ SceneRoots:
   - {fileID: 1563588183}
   - {fileID: 1299125816}
   - {fileID: 1661163902}
+  - {fileID: 826450437}
   - {fileID: 17806092}
   - {fileID: 345482420}
   - {fileID: 2076355991}

@@ -50,4 +50,10 @@ public class UnitHealth : MonoBehaviour, IDamageable
         }
 
     }
+
+    public void ResetHealthSystem()
+    {
+        Health = StartingHealth;
+
+    }
 }

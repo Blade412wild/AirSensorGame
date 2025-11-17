@@ -18,4 +18,10 @@ public class TriggerArea : MonoBehaviour
     {
         gameObject.SetActive(false);
     }
+
+    public void ResetTriggerArea()
+    {
+        gameObject.SetActive(true);
+
+    }
 }

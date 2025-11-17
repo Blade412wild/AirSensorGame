@@ -96,7 +96,25 @@ public class PlayerMovement : MonoBehaviour
 
         velocity = yAxisVelocity + xAxisVelocity;
         transform.position += velocity;
-        Debug.Log(velocity);
+        //Debug.Log(velocity);
+    }
+
+    public void ResetMovement()
+    {
+        velocity = Vector3.zero;
+        xAxisVelocity = Vector3.zero;
+        yAxisVelocity = Vector3.zero;
+
+        reachedLowerBorder = false;
+        reachedUpperBorder = false;
+        reachedRightBorder = false;
+        reachedLeftBorder = false;
+
+        FirstXBorderTouch = true;
+        FirstYBorderTouch = true;
+
+        mayMove = false;
+        transform.position = startPos;
     }
 
     private void HandleBorders()

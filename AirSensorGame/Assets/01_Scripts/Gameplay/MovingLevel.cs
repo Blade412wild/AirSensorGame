@@ -24,6 +24,7 @@ public class MovingLevel : MonoBehaviour
         transform = GetComponent<Transform>();
         startPos = transform.position;
         gameManager.PlayerExitedFirstRoom += () => start = true;
+        gameManager.ResetLevelEvent += HandleLevelReset;
     }
 
     // Update is called once per frame
@@ -38,7 +39,7 @@ public class MovingLevel : MonoBehaviour
         if (pauze)
         {
             pauze = false;
-            mayMove = false; 
+            mayMove = false;
         }
 
         if (reset)
@@ -55,8 +56,15 @@ public class MovingLevel : MonoBehaviour
         }
     }
 
+    private void HandleLevelReset()
+    {
+        pauze = true;
+        reset = true;
+    }
+
     private void OnDisable()
     {
         gameManager.PlayerExitedFirstRoom -= () => start = true;
+        gameManager.ResetLevelEvent -= HandleLevelReset;
     }
 }

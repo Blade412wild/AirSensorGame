@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class GameUIManager : MonoBehaviour
 {
@@ -10,11 +11,12 @@ public class GameUIManager : MonoBehaviour
     [SerializeField] private GameObject arrow;
 
     private void Start()
-    {
+{
         gamemanager.PlayerStartedGame += HandleStartedGame;
         gamemanager.ScoreChanged += HandleScoreChanged;
         gamemanager.PlayerHealthChanged += HandlePlayerHealthChanged;
         gamemanager.PlayerExitedFirstRoom += () => arrow.SetActive(false);
+        gamemanager.ResetLevelEvent += HandleResetLevelEvent;
     }
 
     private void HandleStartedGame()
@@ -32,12 +34,29 @@ public class GameUIManager : MonoBehaviour
         scroringText.text = score.ToString();
     }
 
+
+    private void HandleResetLevelEvent()
+    {
+        //ScoreChangeEvent?.Invoke(0);
+        foreach (GameObject heart in hearts)
+        {
+            heart.SetActive(true);
+        }
+
+        scroringText.text = "X";
+
+        TutorialUI.SetActive(true);
+        arrow.SetActive(true);
+
+    }
     private void OnDisable()
     {
         gamemanager.PlayerStartedGame -= HandleStartedGame;
         gamemanager.ScoreChanged -= HandleScoreChanged;
         gamemanager.PlayerHealthChanged -= HandlePlayerHealthChanged;
         gamemanager.PlayerExitedFirstRoom -= () => arrow.SetActive(false);
+        gamemanager.ResetLevelEvent -= HandleResetLevelEvent;
+
 
     }
 
