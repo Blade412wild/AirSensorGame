@@ -7,12 +7,14 @@ public class GameUIManager : MonoBehaviour
     [SerializeField] private GameObject TutorialUI;
     [SerializeField] private TMPro.TMP_Text scroringText;
     [SerializeField] private GameObject[] hearts;
+    [SerializeField] private GameObject arrow;
 
     private void Start()
     {
         gamemanager.PlayerStartedGame += HandleStartedGame;
         gamemanager.ScoreChanged += HandleScoreChanged;
         gamemanager.PlayerHealthChanged += HandlePlayerHealthChanged;
+        gamemanager.PlayerExitedFirstRoom += () => arrow.SetActive(false);
     }
 
     private void HandleStartedGame()
@@ -21,7 +23,8 @@ public class GameUIManager : MonoBehaviour
     }
     private void HandlePlayerHealthChanged(sbyte health)
     {
-        hearts[health -1].SetActive(false);
+        if (health >= hearts.Length || health < 0) return;
+        hearts[health].SetActive(false);
     }
 
     private void HandleScoreChanged(sbyte score)
@@ -34,6 +37,8 @@ public class GameUIManager : MonoBehaviour
         gamemanager.PlayerStartedGame -= HandleStartedGame;
         gamemanager.ScoreChanged -= HandleScoreChanged;
         gamemanager.PlayerHealthChanged -= HandlePlayerHealthChanged;
+        gamemanager.PlayerExitedFirstRoom -= () => arrow.SetActive(false);
+
     }
 
 }

@@ -14,6 +14,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private Transform MinTrans;
 
     [SerializeField] private BreathingDeviceData data;
+    [SerializeField] private LayerMask groundLayer;
 
 
     [SerializeField] private bool useSensor;
@@ -22,6 +23,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField]
     [Range(0, 15)]
     private float airvelocity;
+
+    [SerializeField] private float groundDistanceCheckRange;
+    private bool reachedLowerBorder;
 
     private Vector3 max => MaxTrans.position;
     private Vector3 min => MinTrans.position;
@@ -40,7 +44,13 @@ public class PlayerMovement : MonoBehaviour
 
     private bool isblowing;
     private bool reachedMin;
-    private bool reachedMax;
+    private bool reachedUpperBorder;
+    private bool reachedLeftBorder;
+    private bool reachedRightBorder;
+
+    private bool FirstYBorderTouch = true;
+    private bool FirstXBorderTouch = true;
+
     private bool mayMove;
 
     private void Start()
@@ -58,67 +68,100 @@ public class PlayerMovement : MonoBehaviour
         if (!mayMove) return;
 
         SetUpForce();
-        if (transform.position.y >= max.y)
-        {
-            reachedMax = true;
-            velocity = Vector3.zero;
-            transform.position = new Vector3(transform.position.x, max.y, transform.position.z);
-        }
-        else if (transform.position.y <= min.y)
-        {
-            //Debug.Log("miny : " + min.y + " player : " + transform.position.y);
-            reachedMin = true;
-            velocity = Vector3.zero;
-            transform.position = new Vector3(transform.position.x, min.y, transform.position.z);
-        }
-        else
-        {
-            reachedMin = false;
-            reachedMax = false;
-        }
+        HandleBorders();
 
         keyInput = wasdMovementAction.action.ReadValue<Vector2>();
-
-        if (data.AirVelocity > 0 || isblowing)
-        {
-
-        }
-        else // falling 
-        {
-            if (transform.position.y <= min.y)
-            {
-                //Debug.Log("miny : " + min.y + " player : " + transform.position.y);
-                reachedMin = true;
-                velocity = Vector3.zero;
-                transform.position = new Vector3(transform.position.x, min.y, transform.position.z);
-            }
-            else
-            {
-                reachedMin = false;
-            }
-
-        }
     }
 
     private void FixedUpdate()
     {
         if (!mayMove) return;
 
+        CheckBorders();
 
         SetXaxisVelocity();
 
-        if (!reachedMin)
+        if (!reachedLowerBorder)
         {
             CalculateNewPosWithGravity();
         }
 
-        if (isblowing && !reachedMax)
+
+        if (isblowing && !reachedUpperBorder)
         {
             CalculateNewPosWithBoost();
         }
 
+        HandleBorders();
+
         velocity = yAxisVelocity + xAxisVelocity;
         transform.position += velocity;
+        Debug.Log(velocity);
+    }
+
+    private void HandleBorders()
+    {
+        if (reachedUpperBorder && FirstYBorderTouch || reachedLowerBorder && FirstYBorderTouch) // resetting velocity
+        {
+            velocity.y = 0;
+            yAxisVelocity.y = 0;
+            FirstYBorderTouch = false;
+            //Debug.Log("--" + velocity);
+
+        }
+
+        if (reachedLeftBorder && FirstXBorderTouch || reachedRightBorder && FirstXBorderTouch) // resetting velocity
+        {
+            velocity.x = 0;
+            xAxisVelocity.x = 0;
+            FirstXBorderTouch = false;
+            //Debug.Log("++" + velocity);
+        }
+
+        if (!reachedUpperBorder && !reachedLowerBorder)
+        {
+            FirstYBorderTouch = true;
+        }
+
+        if (!reachedLeftBorder && !reachedRightBorder)
+        {
+            FirstXBorderTouch = true;
+        }
+
+
+    }
+
+    private void CheckBorders()
+    {
+        reachedLowerBorder = ShootRaycast(Vector3.down);
+
+        if (!reachedLowerBorder)
+        {
+            reachedUpperBorder = ShootRaycast(Vector3.up);
+        }
+
+        reachedRightBorder = ShootRaycast(Vector3.right);
+
+        if (!reachedRightBorder)
+        {
+            reachedLeftBorder = ShootRaycast(Vector3.left);
+        }
+
+    }
+
+    private bool ShootRaycast(Vector3 dir)
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, dir, out hit, groundDistanceCheckRange, groundLayer))
+        {
+            Debug.DrawRay(transform.position, transform.TransformDirection(dir) * hit.distance, Color.yellow);
+            return true;
+        }
+        else
+        {
+            Debug.DrawRay(transform.position, transform.TransformDirection(dir) * 1000, Color.white);
+            return false;
+        }
     }
 
     private void CalculateNewPosWithGravity()
@@ -135,7 +178,16 @@ public class PlayerMovement : MonoBehaviour
 
     private void SetXaxisVelocity()
     {
+        
         xAxisVelocity = (keyInput * speedScalar) * Time.deltaTime;
+        if (reachedLeftBorder && keyInput.x <0)
+        {
+            xAxisVelocity.x = 0;
+        }
+        if (reachedRightBorder && keyInput.x > 0)
+        {
+            xAxisVelocity.x = 0;
+        }
     }
 
     private void SetUpForce()

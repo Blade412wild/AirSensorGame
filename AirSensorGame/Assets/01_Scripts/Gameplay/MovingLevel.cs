@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class MovingLevel : MonoBehaviour
 {
+    [SerializeField] private PrototypeGameManager gameManager;
+
     [SerializeField] private bool start;
     [SerializeField] private bool pauze;
     [SerializeField] private bool reset;
@@ -21,6 +23,7 @@ public class MovingLevel : MonoBehaviour
     {
         transform = GetComponent<Transform>();
         startPos = transform.position;
+        gameManager.PlayerExitedFirstRoom += () => start = true;
     }
 
     // Update is called once per frame
@@ -50,5 +53,10 @@ public class MovingLevel : MonoBehaviour
             Vector3 velocity = dir * speed;
             transform.position += velocity * Time.deltaTime;
         }
+    }
+
+    private void OnDisable()
+    {
+        gameManager.PlayerExitedFirstRoom -= () => start = true;
     }
 }
