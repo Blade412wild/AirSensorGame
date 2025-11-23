@@ -23,6 +23,7 @@ public class PrototypeGameManager : MonoBehaviour
 
     [Space]
     [SerializeField] private TriggerArea ExitFirstRoomTrigger;
+    [SerializeField] private TriggerArea FinishTrigger;
 
     public bool Reset;
 
@@ -32,14 +33,16 @@ public class PrototypeGameManager : MonoBehaviour
     {
         startlevelAction.action.Enable();
         startlevelAction.action.started += StartGame;
-        CheckMicorControllerStatus();
+
         ExitFirstRoomTrigger.TriggerEvent += HandlePlayerExitFirstRoom;
         player.PlayerHit += HandlePlayerHitEvent;
         player.PlayerDied += HandlePlayerDeathEvent;
         scoreManager.ScoreChangeEvent += (x) => ScoreChanged?.Invoke(x);
 
         ResetLevelEvent += ResetLevel;
+        FinishTrigger.TriggerEvent += (x) => ResetLevelEvent?.Invoke();
 
+        CheckMicorControllerStatus();
     }
 
     // Update is called once per frame
@@ -95,6 +98,11 @@ public class PrototypeGameManager : MonoBehaviour
         scoreManager.ScoreChangeEvent -= (x) => ScoreChanged?.Invoke(x);
         player.PlayerHit -= HandlePlayerHitEvent;
         player.PlayerDied -= HandlePlayerDeathEvent;
+
+
+        ResetLevelEvent -= ResetLevel;
+        scoreManager.ScoreChangeEvent -= (x) => ScoreChanged?.Invoke(x);
+        FinishTrigger.TriggerEvent -= (x) => ResetLevelEvent?.Invoke();
 
     }
 
