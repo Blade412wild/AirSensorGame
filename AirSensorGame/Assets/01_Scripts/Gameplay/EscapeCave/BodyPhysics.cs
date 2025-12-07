@@ -1,10 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.XR.Interaction.Toolkit.Inputs;
 
-public class HandPhysics : MonoBehaviour
+public class BodyPhysics : MonoBehaviour
 {
-    public enum Hand { Left, Right }
 
     public bool UpdateFollowObject;
 
@@ -15,10 +13,8 @@ public class HandPhysics : MonoBehaviour
     public float Speed => Direction.magnitude / Time.deltaTime;
     public Transform Transform { get; private set; }
 
-    [SerializeField] private Hand hand;
     [SerializeField] private InputActionReference buttonRefrence;
     [SerializeField] private Transform followingObject;
-    [SerializeField] private BodyPhysics bodyPhysics;
 
     private Vector3 newDirection;
     private Vector3 previousVelocity;
@@ -36,11 +32,10 @@ public class HandPhysics : MonoBehaviour
 
     private void Update()
     {
-        UpdateHandPhysics();
-        UpdateFollowingObject();
+        UpdatePhysics();
     }
 
-    private void UpdateHandPhysics()
+    private void UpdatePhysics()
     {
         currentPos = Transform.position;
 
@@ -49,34 +44,8 @@ public class HandPhysics : MonoBehaviour
             previousPos = currentPos;
         }
         Direction = currentPos - previousPos;
-        
         CurrentVelocity = Direction / Time.deltaTime;
-        CurrentVelocity -= bodyPhysics.CurrentVelocity;
 
         previousPos = currentPos;
     }
-
-    private void UpdateFollowingObject()
-    {
-        //if (buttonRefrence.action.ReadValue<bool>() == true || UpdateFollowObject == true)
-
-        if (UpdateFollowObject == true)
-        {
-            if (previousTrackingState == false)
-            {
-                followingObject.transform.position = Transform.position;
-                previousTrackingState = true;
-            }
-            else
-            {
-
-                followingObject.transform.position += CurrentVelocity * Time.deltaTime;
-            }
-
-        }
-    }
-
-
-
-
 }

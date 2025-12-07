@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 
 public class SchoolslagDetection : MonoBehaviour
 {
-    public enum MoveState { Idle, Push, Pull, Glide, }
+    public enum MoveState { Idle, Push, Pull, Glide, Recovery }
     [Space]
     [Header("Pushing Parameters")]
 
@@ -39,6 +39,11 @@ public class SchoolslagDetection : MonoBehaviour
     [SerializeField] private float pullRangeMax;
 
     [Space]
+    [Header("Pull Parameters")]
+    [SerializeField] private float maxAngleBetweenMoveVelocityAndHandVelocity;
+
+
+    [Space]
     [Header("refrences")]
 
     [SerializeField] private Transform leftHandTrans;
@@ -49,11 +54,13 @@ public class SchoolslagDetection : MonoBehaviour
 
     [SerializeField] private HandPhysics leftHandPhysics;
     [SerializeField] private HandPhysics rightHandPhysics;
+    [SerializeField] private BodyPhysics bodyPhysics;
 
     [SerializeField] private Transform leftHandGyroReference;
     [SerializeField] private Transform rightHandGyroReference;
 
-    private MoveState moveState;
+    [SerializeField] private MoveState moveState;
+
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -79,6 +86,7 @@ public class SchoolslagDetection : MonoBehaviour
             case MoveState.Push: InPushPhase(); break;
             case MoveState.Pull: InPullPhase(); break;
             case MoveState.Glide: GlidePhase(); break;
+            case MoveState.Recovery: InRecoveryPhase(); break;
         }
     }
 
@@ -114,8 +122,15 @@ public class SchoolslagDetection : MonoBehaviour
         {
             Debug.Log("Go To Gliding");
             moveState = MoveState.Glide;
+            return;
         }
 
+        //if (DetectIfIdle())
+        //{
+        //    Debug.Log("Go To Idle");
+        //    moveState = MoveState.Idle;
+        //    return;
+        //}
 
     }
     private void GlidePhase() // lowest drag and best result 
@@ -141,44 +156,63 @@ public class SchoolslagDetection : MonoBehaviour
         // if both hands have the thumbs up((0 angle?)) && phase the same direction && and both have a forward direction  
         // go to pushPhase
 
+        // the bigger the difference between, your new Velocity and the bodyMoveDirection the bigger the drag and mabey a reduction in speed;
+        if (DetectIfRecovering())
+        {
+            Debug.Log("Go To Recovery");
+            moveState = MoveState.Recovery;
+        }
+    }
+
+    private void InRecoveryPhase()
+    {
+
         if (DetectIfPushing())
         {
             Debug.Log("Go To Pushing");
             moveState = MoveState.Push;
         }
+
+        //if (DetectIfIdle())
+        //{
+        //    Debug.Log("Go To Idle");
+        //    moveState = MoveState.Idle;
+        //    return;
+        //}
+
     }
 
 
     private bool DetectIfPushing()
     {
-        //bool lefthandIsPushing = false;
-
-        //bool leftHandRotationInRange = CheckIfRotationIsInRange(leftHandPhysics.Transform.up, leftHandGyroReference.up, pushRangeMin, pushRangeMax);
-        //bool lefthandMovementIsGood = IsHandMovingSameDirectionAsForwardDir(leftHandPhysics.transform.forward, leftHandPhysics.normalizedDirection);
-
-        //if (leftHandRotationInRange && lefthandMovementIsGood)
-        //{
-        //    lefthandIsPushing = true;
-        //}
-
-        //bool righthandIsPushing = false;
-
-        //bool rightHandRotationInRange = CheckIfRotationIsInRange(rightHandPhysics.Transform.up, rightHandGyroReference.up * -1, pushRangeMin, pushRangeMax);
-        //bool righthandMovementIsGood = IsHandMovingSameDirectionAsForwardDir(rightHandPhysics.transform.forward, rightHandPhysics.normalizedDirection);
-
-        //if (rightHandRotationInRange && righthandMovementIsGood)
-        //{
-        //    righthandIsPushing = true;
-        //}
-
-        //if (lefthandIsPushing && righthandIsPushing && CloseEnough()) return true;
-        //return false;
+        bool lefthandIsPushing = false;
 
         bool leftHandRotationInRange = CheckIfRotationIsInRange(leftHandPhysics.Transform.up, leftHandGyroReference.up, pushRangeMin, pushRangeMax);
+        bool lefthandMovementIsGood = IsAngleDifferenceAcceptable(leftHandPhysics.transform.forward, leftHandPhysics.normalizedDirection, maxAngleAcceptanceDifferenceBetweenMoveAndForwardDirection);
+
+        if (leftHandRotationInRange && lefthandMovementIsGood)
+        {
+            lefthandIsPushing = true;
+        }
+
+        bool righthandIsPushing = false;
+
+        bool rightHandRotationInRange = CheckIfRotationIsInRange(rightHandPhysics.Transform.up, rightHandGyroReference.up * -1, pushRangeMin, pushRangeMax);
+        bool righthandMovementIsGood = IsAngleDifferenceAcceptable(rightHandPhysics.transform.forward, rightHandPhysics.normalizedDirection, maxAngleAcceptanceDifferenceBetweenMoveAndForwardDirection);
+
+        if (rightHandRotationInRange && righthandMovementIsGood)
+        {
+            righthandIsPushing = true;
+        }
+
+        if (lefthandIsPushing && righthandIsPushing && CloseEnough()) return true;
+        return false;
+
+        //bool leftHandRotationInRange = CheckIfRotationIsInRange(leftHandPhysics.Transform.up, leftHandGyroReference.up, pushRangeMin, pushRangeMax);
         //bool rightHandRotationInRange = CheckIfRotationIsInRange(rightHandPhysics.Transform.up, rightHandGyroReference.up * -1, pushRangeMin, pushRangeMax);
 
-        if (leftHandRotationInRange) return true;
-        return false;
+        //if (lefthandIsPushing) return true;
+        //return false;
 
     }
 
@@ -186,35 +220,62 @@ public class SchoolslagDetection : MonoBehaviour
     {
         // lefthand
         bool leftHandRotationInRange = CheckIfRotationIsInRange(leftHandPhysics.Transform.up, leftHandGyroReference.up, pullRangeMin, pullRangeMax);
-        //bool rightHandInRange = CheckIfRotationIsInRange(rightHandPhysics.Transform.up, rightHandGyroReference.up * -1, pullRangeMin, pullRangeMax);
+        bool rightHandRotationInRange = CheckIfRotationIsInRange(rightHandPhysics.Transform.up, rightHandGyroReference.up * -1, pullRangeMin, pullRangeMax);
 
-        //if (leftHandInRange && rightHandInRange) return true;
+        if (leftHandRotationInRange && rightHandRotationInRange) return true;
+        return false;
+
+        //if (leftHandRotationInRange) return true;
         //return false;
+    }
 
-        if (leftHandRotationInRange) return true;
+    private bool DetectIfRecovering()
+    {
+        // calculate the angle between the movement velocity of the body and a hand to determine if it's pushing or brining it;s hands forward "Recovery"
+        if (leftHandPhysics.Speed <= 0 && rightHandPhysics.Speed <= 0) return false;
+
+        bool leftHandVelocityAndBodyMoveVelocityIsSame = IsAngleDifferenceAcceptable(bodyPhysics.transform.forward, leftHandPhysics.Direction, maxAngleBetweenMoveVelocityAndHandVelocity);
+
+        if (leftHandVelocityAndBodyMoveVelocityIsSame) return true;
         return false;
     }
     private bool DetectIfGliding()
     {
+        // if hands push and front direction is the direction of body Movement Velocity
+        // hands need to be close to eachother
+        // ?Distance check for how far you have yoiur arms? Mabey
+
         bool leftHandRotationInRange = CheckIfRotationIsInRange(leftHandPhysics.Transform.up, leftHandGyroReference.up, glideRangeMin, glideRangeMax);
-        //bool rightHandInRange = CheckIfRotationIsInRange(rightHandPhysics.Transform.up, rightHandGyroReference.up * -1, glideRangeMin, glideRangeMax);
+        bool rightHandRotationInRange = CheckIfRotationIsInRange(rightHandPhysics.Transform.up, rightHandGyroReference.up * -1, glideRangeMin, glideRangeMax);
 
-        //if (leftHandInRange && rightHandInRange) return true;
-        //return false;
 
-        if (leftHandRotationInRange) return true;
+        if (leftHandRotationInRange && rightHandRotationInRange && CloseEnough()) return true;
         return false;
+
+        //if (leftHandRotationInRange) return true;
+        //return false;
     }
     private bool DetectIfIdle()
     {
-        bool leftHandRotationInRange = CheckIfRotationIsInRange(leftHandPhysics.Transform.up, leftHandGyroReference.up, pushRangeMin, pullRangeMax);
-        bool rightHandInRange = CheckIfRotationIsInRange(rightHandPhysics.Transform.up, rightHandGyroReference.up * -1, pushRangeMin, pullRangeMax);
+        bool leftHandIsMoving = true;
+        bool rightHandIsMoving = true;
 
-        //if (leftHandInRange && rightHandInRange) return true;
-        //return false;
+        //Debug.Log(leftHandPhysics.Speed);
 
-        if (leftHandRotationInRange) return true;
-        return false;
+        if (leftHandPhysics.Speed >= 0.0 && leftHandPhysics.Speed < minPushSpeed)
+        {
+            leftHandIsMoving = false;
+
+        }
+
+        //if (rightHandPhysics.Speed > 0.0 && rightHandPhysics.Speed < minPushSpeed)
+        //{
+        //    rightHandIsMoving = true;
+        //}
+
+
+        if (leftHandIsMoving) return false;
+        return true;
     }
 
     private bool CheckIfRotationIsInRange(Vector3 input, Vector3 refrenceVector, float minRange, float maxRange)
@@ -233,12 +294,13 @@ public class SchoolslagDetection : MonoBehaviour
 
     }
 
-    private bool IsHandMovingSameDirectionAsForwardDir(Vector3 forwardDir, Vector3 VelocityDirection)
+    private bool IsAngleDifferenceAcceptable(Vector3 vectorA, Vector3 vectorB, float maxAngle)
     {
 
-        float handAngleDifference = Vector3.AngleBetween(forwardDir, VelocityDirection);
+        float angle = Vector3.Angle(vectorA, vectorB);
+        Debug.Log("angle : " + angle);
 
-        if (handAngleDifference < maxAngleAcceptanceDifferenceBetweenMoveAndForwardDirection) return true;
+        if (angle <= maxAngle) return true;
         return false;
     }
 
@@ -249,4 +311,6 @@ public class SchoolslagDetection : MonoBehaviour
         return false;
 
     }
+
+
 }
