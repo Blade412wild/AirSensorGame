@@ -1926,8 +1926,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   StateText: {fileID: 774263385}
   schoolslagDetection: {fileID: 792807690}
-  lenght: 0.71
-  height: 0.16
+  lenght: 0.83
+  height: 0.08
 --- !u!1 &614145707
 GameObject:
   m_ObjectHideFlags: 0
@@ -2899,16 +2899,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SwimmingSystem
   pushRangeMin: 0.59
   pushRangeMax: 1
+  minAngleAcceptanceDifferenceBetweenMoveAndForwardDirection: 0
   maxAngleAcceptanceDifferenceBetweenMoveAndForwardDirection: 30
-  minPushSpeed: 0.05
-  maxDistance: 0.2
-  leftDot: 0
-  rightDot: 0
-  glideRangeMin: 0
+  minPushSpeed: 0.2
+  pushMaxDistanceBetweenHands: 0.2
+  glideRangeMin: -0.1
   glideRangeMax: 0.6
+  glideMaxDistanceBetweenHands: 0.25
   pullRangeMin: -1
   pullRangeMax: -0.1
-  maxAngleBetweenMoveVelocityAndHandVelocity: 70
+  minAngleIntoRecovery: 0
+  maxAngleIntoRecovery: 70
+  minAngleRecoveryCheckActivation: 130
+  maxAngleRecoveryCheckActivation: 180
+  minRecoveryCheckSpeedActivation: 0.4
+  minIntoRecoverySpeed: 0.3
   leftHandTrans: {fileID: 40291317}
   rightHandTrans: {fileID: 1827017596}
   leftHandPushAction: {fileID: 0}
@@ -7471,7 +7476,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   bodyPhysics: {fileID: 1776723284}
   cameraTrans: {fileID: 1593233956}
-  speed: 0
+  speed: 0.1
 --- !u!114 &1776723284
 MonoBehaviour:
   m_ObjectHideFlags: 0
