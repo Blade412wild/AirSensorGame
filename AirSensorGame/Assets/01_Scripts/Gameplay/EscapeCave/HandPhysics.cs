@@ -4,7 +4,6 @@ using UnityEngine.XR.Interaction.Toolkit.Inputs;
 
 public class HandPhysics : MonoBehaviour
 {
-    public enum Hand { Left, Right }
 
     public bool UpdateFollowObject;
 
@@ -80,3 +79,4 @@ public class HandPhysics : MonoBehaviour
 
 
 }
+public enum Hand { Left, Right }
