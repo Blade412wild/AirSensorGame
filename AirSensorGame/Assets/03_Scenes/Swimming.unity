@@ -7474,6 +7474,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6bf38ea467add94c84dc6c6457f3e87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  moveDir: {x: 0, y: 0, z: 0}
   bodyPhysics: {fileID: 1776723284}
   cameraTrans: {fileID: 1593233956}
   speed: 0.1
