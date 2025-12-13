@@ -9,12 +9,13 @@ public class BreathingDeviceData : ScriptableObject
     public bool IsConnected;
 
     // sensor data
-    public enum breathingState { inhaling, exhaling, holdingBreath };
     public breathingState BreathingState;
 
     public bool ExHalingThroughNose;
     public float inExhaleSpeed;
+    public float chestPostion;
     public float AirVelocity;
 
 }
+public enum breathingState { inhaling = -1, holdingBreath = 0, exhaling = 1 };
 
