@@ -20,7 +20,7 @@ public class BreathingSystem : MonoBehaviour
         if (!update) return;
         if (!isPlayerUnderwater) return;
 
-        if(data.BreathingState == breathingState.inhaling)
+        if(data.BreathingState == BreathingState.inhaling)
         {
             Debug.Log("PlayerDied");
         }

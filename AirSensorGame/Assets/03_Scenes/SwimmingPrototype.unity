@@ -119,6 +119,77 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1001 &10727501
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 679bc36434261ee48a003d7909aff54d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 2.89491
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 679bc36434261ee48a003d7909aff54d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -4.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 679bc36434261ee48a003d7909aff54d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 10.6191
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 679bc36434261ee48a003d7909aff54d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 679bc36434261ee48a003d7909aff54d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 679bc36434261ee48a003d7909aff54d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 679bc36434261ee48a003d7909aff54d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 679bc36434261ee48a003d7909aff54d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 679bc36434261ee48a003d7909aff54d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 679bc36434261ee48a003d7909aff54d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 679bc36434261ee48a003d7909aff54d, type: 3}
+      propertyPath: m_Name
+      value: X Bot@Swimming
+      objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: 679bc36434261ee48a003d7909aff54d, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: b0dc72e5c4dcb86469010e0aa7820d25, type: 2}
+    - target: {fileID: 5866666021909216657, guid: 679bc36434261ee48a003d7909aff54d, type: 3}
+      propertyPath: m_WarningMessage
+      value: "\nBinding warning: Some generic clip(s) animate transforms that are
+        already bound by a Humanoid avatar. These transforms can only be changed
+        by Humanoid clips.\n\tTransform 'mixamorig:Hips'\n\tTransform 'mixamorig:LeftFoot'\n\tTransform
+        'mixamorig:LeftHandThumb2'\n\tTransform 'mixamorig:LeftHandIndex1'\n\tTransform
+        'mixamorig:LeftHandPinky2'\n\tTransform 'mixamorig:RightHandRing2'\n\tTransform
+        'mixamorig:Spine1'\n\tTransform 'mixamorig:LeftToeBase'\n\tTransform 'mixamorig:LeftHandThumb3'\n\tTransform
+        'mixamorig:RightArm'\n\tand more ...\n\tFrom animation clip 'Swimming'"
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 679bc36434261ee48a003d7909aff54d, type: 3}
 --- !u!1 &171485420
 GameObject:
   m_ObjectHideFlags: 0
@@ -2168,7 +2239,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   rigidbody: {fileID: 1529266188}
   headTransform: {fileID: 1529266187}
-  Force: 100
+  pushPhase: {x: 0, y: 0.5}
+  glidePhase: {x: 0, y: 0}
+  pullPhase: {x: 0.5, y: 1.25}
+  recoveryPhase: {x: 1.25, y: 1.5}
+  Force: 80
   forceMode: 0
   ForceCurve:
     serializedVersion: 2
@@ -2183,8 +2258,8 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.51999664
-      value: 0
+      time: 0.50253296
+      value: 0.0049591064
       inSlope: -0.004640455
       outSlope: -0.004640455
       tangentMode: 0
@@ -2201,8 +2276,8 @@ MonoBehaviour:
       inWeight: 0.64440435
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 1.0462186
-      value: 0.96483815
+      time: 1.2470319
+      value: -0.017110705
       inSlope: -0.03353364
       outSlope: -0.03353364
       tangentMode: 0
@@ -2210,7 +2285,7 @@ MonoBehaviour:
       inWeight: 1
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 1.7462262
+      time: 1.5017545
       value: -0.017562866
       inSlope: 0.0049188957
       outSlope: 0.0049188957
@@ -2222,8 +2297,13 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   animationDuration: 1.75
-  kickForce: 50
-  drag: 60
+  maxSpeed: 0.5
+  kickForce: 10
+  baseDrag: 65
+  pushMultiplier: 1.2
+  glideMultiplier: 0
+  pullMultiplier: 1.2
+  recoveryMultiplier: 2
   dragCurve:
     serializedVersion: 2
     m_Curve:
@@ -3135,3 +3215,4 @@ SceneRoots:
   - {fileID: 1529266187}
   - {fileID: 1299514729}
   - {fileID: 422260056}
+  - {fileID: 10727501}
