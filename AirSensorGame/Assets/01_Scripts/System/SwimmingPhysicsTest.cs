@@ -55,12 +55,14 @@ public class SwimmingPhysicsTest : MonoBehaviour
     [SerializeField] private Vector3 OwnCalculatedVelocity;
     [SerializeField] private Vector3 RigidbodyCalculatedVelocity;
 
-    private bool applyForce;
+    private bool applyPropulsionForce;
     private Vector3 currentMoveVelocity;
     private Vector3 previousPos;
     private float Animationprogess = 0;
     private bool inAnimation = false;
     private bool lastPhysicsUpdate;
+    private MoveState currentState;
+
 
 
 
@@ -85,7 +87,7 @@ public class SwimmingPhysicsTest : MonoBehaviour
                 ResetAnimation();
             }
 
-            applyForce = true;
+            applyPropulsionForce = true;
 
             if (useCurve)
             {
@@ -135,12 +137,12 @@ public class SwimmingPhysicsTest : MonoBehaviour
             ApplyDrag();
         }
 
-        if (applyForce)
+        if (applyPropulsionForce)
         {
             if (lastPhysicsUpdate)
             {
                 lastPhysicsUpdate = false;
-                applyForce = false;
+                applyPropulsionForce = false;
             }
 
             if (forceMode == ForceMode.Force && useCurve == true)
@@ -203,6 +205,7 @@ public class SwimmingPhysicsTest : MonoBehaviour
         MoveState currentMoveState = GetCurrentBreathingState();
         float multiplier = GetDragMultiplier(currentMoveState);
         return baseDrag * multiplier;
+        
     }
 
     //private float CalculatePropulsion()
@@ -246,5 +249,28 @@ public class SwimmingPhysicsTest : MonoBehaviour
         {
             Debug.Log("magnitude : " + currentVelocity.magnitude);
         }
+    }
+
+    public void SwitchMovementPhase(MoveState state)
+    {
+        currentState = state;
+    }
+
+    public void SwitchedToPushPhase()
+    {
+        //applyForce = true;
+        ApplyKick();
+    }
+    public void SwitchedToPullPhase()
+    {
+        applyPropulsionForce = true;
+    }
+    public void SwitchedToRecoveryPhase()
+    {
+        applyPropulsionForce = false;
+    }
+    public void SwitchedToGlidePhase()
+    {
+
     }
 }
