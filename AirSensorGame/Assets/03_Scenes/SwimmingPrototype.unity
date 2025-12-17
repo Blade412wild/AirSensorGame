@@ -1602,7 +1602,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: cd08cd1a3ad97f6489d4e485e72be16e, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.41
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -1966,7 +1966,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: cd08cd1a3ad97f6489d4e485e72be16e, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.41
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -2370,7 +2370,6 @@ Transform:
   m_Children:
   - {fileID: 253408366}
   - {fileID: 263375842}
-  - {fileID: 1476423133}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1299347035
@@ -2874,37 +2873,6 @@ MonoBehaviour:
     m_ObjectReferenceObject: {fileID: 0}
     m_ManualValue: {x: 0, y: 0}
   m_UseGravity: 1
---- !u!1 &1476423132
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1476423133}
-  m_Layer: 0
-  m_Name: ArmsWaterSound
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1476423133
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1476423132}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1277299217}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1529266183
 GameObject:
   m_ObjectHideFlags: 0
@@ -5102,6 +5070,7 @@ GameObject:
   - component: {fileID: 4540229000371508671}
   - component: {fileID: 4540229000371508673}
   - component: {fileID: 4540229000371508672}
+  - component: {fileID: 4540229000371508674}
   m_Layer: 0
   m_Name: HumanMale_Character_FREE
   m_TagString: Untagged
@@ -7048,67 +7017,58 @@ MonoBehaviour:
   glidePhase: {x: 0, y: 0}
   pullPhase: {x: 0.5, y: 1.25}
   recoveryPhase: {x: 1.25, y: 1.5}
-  Force: 80
+  Force: 200
   forceMode: 0
   ForceCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
-      inSlope: -Infinity
-      outSlope: -Infinity
-      tangentMode: 0
+      value: 0.5
+      inSlope: 2.5
+      outSlope: 2.5
+      tangentMode: 34
       weightedMode: 0
       inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 0.50253296
-      value: 0.0049591064
-      inSlope: -0.004640455
-      outSlope: -0.004640455
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.74905604
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 0.83335483
-      value: 0.9767833
-      inSlope: -0.025464777
-      outSlope: -0.025464777
-      tangentMode: 0
+      time: 0.2
+      value: 1
+      inSlope: 1.25
+      outSlope: 1.25
+      tangentMode: 34
       weightedMode: 0
-      inWeight: 0.64440435
+      inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 1.2470319
-      value: -0.017110705
-      inSlope: -0.03353364
-      outSlope: -0.03353364
-      tangentMode: 0
+      time: 0.3
+      value: 1
+      inSlope: -0.4166667
+      outSlope: -0.4166667
+      tangentMode: 34
       weightedMode: 0
-      inWeight: 1
+      inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 1.5017545
-      value: -0.017562866
-      inSlope: 0.0049188957
-      outSlope: 0.0049188957
-      tangentMode: 0
+      time: 0.9
+      value: 0.5
+      inSlope: -0.8333334
+      outSlope: -0.8333334
+      tangentMode: 34
       weightedMode: 0
-      inWeight: 0.86534107
+      inWeight: 0.33333334
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  animationDuration: 1.75
+  animationDuration: 0.9
   maxSpeed: 0.5
-  kickForce: 10
+  kickForce: 30
   baseDrag: 65
-  pushMultiplier: 1.2
+  pushMultiplier: 1
   glideMultiplier: 0
-  pullMultiplier: 1.2
-  recoveryMultiplier: 2
+  pullMultiplier: 1
+  recoveryMultiplier: 1
   dragCurve:
     serializedVersion: 2
     m_Curve:
@@ -7145,8 +7105,8 @@ MonoBehaviour:
   useCurve: 1
   startForce: 0
   legKick: 0
-  OwnCalculatedVelocity: {x: 0, y: 0, z: 0.003051759}
-  RigidbodyCalculatedVelocity: {x: 0, y: 0, z: 0.0030563097}
+  OwnCalculatedVelocity: {x: 0, y: 0, z: 0.3475429}
+  RigidbodyCalculatedVelocity: {x: 0, y: 0, z: 0.34753612}
 --- !u!54 &4540229000371508673
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -7174,6 +7134,26 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &4540229000371508674
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1782702501601814112}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4eadb9a5062a03041883dd425c0ed943, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HandAudioManager
+  leftHand: {fileID: 1127593308}
+  rightHand: {fileID: 1088614631}
+  clips:
+  - {fileID: 8300000, guid: cd08cd1a3ad97f6489d4e485e72be16e, type: 3}
+  - {fileID: 8300000, guid: 88979d714b4c62d4fadb574492d89191, type: 3}
+  - {fileID: 8300000, guid: c43af6dcd05953f479438426c1bf5990, type: 3}
+  audioSteps: 0000000001000000000000000100000002000000010000000000000002000000010000000000000002000000
+  playSound: 0
 --- !u!4 &4548762039600130478
 Transform:
   m_ObjectHideFlags: 0

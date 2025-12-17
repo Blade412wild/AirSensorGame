@@ -61,7 +61,7 @@ public class SwimmingPhysicsTest : MonoBehaviour
     private float Animationprogess = 0;
     private bool inAnimation = false;
     private bool lastPhysicsUpdate;
-    private MoveState currentState;
+    private MoveState currentMoveState;
 
 
 
@@ -115,9 +115,9 @@ public class SwimmingPhysicsTest : MonoBehaviour
                 Animationprogess = animationDuration;
 
                 Debug.Log("Animation is done");
-                lastPhysicsUpdate = true;
-                ResetAnimation();
-                ApplyKick();
+                //lastPhysicsUpdate = true;
+                //ResetAnimation();
+                //ApplyKick();
             }
         }
 
@@ -145,11 +145,11 @@ public class SwimmingPhysicsTest : MonoBehaviour
                 applyPropulsionForce = false;
             }
 
-            if (forceMode == ForceMode.Force && useCurve == true)
+            if (inAnimation)
             {
                 float ForceMultiplier = ForceCurve.Evaluate(Animationprogess);
 
-                ApplyForce(1 * Force);
+                ApplyForce(ForceMultiplier * Force);
                 SpeedControl();
 
             }
@@ -191,21 +191,22 @@ public class SwimmingPhysicsTest : MonoBehaviour
         Debug.Log(" reset");
         Animationprogess = 0;
         inAnimation = false;
-        startForce = true;
+        //startForce = true;
 
     }
 
     private void StartAnimation()
     {
         inAnimation = true;
+
     }
 
     private float CalculateDrag()
     {
-        MoveState currentMoveState = GetCurrentBreathingState();
+        //MoveState currentMoveState = GetCurrentBreathingState();
         float multiplier = GetDragMultiplier(currentMoveState);
         return baseDrag * multiplier;
-        
+
     }
 
     //private float CalculatePropulsion()
@@ -248,12 +249,20 @@ public class SwimmingPhysicsTest : MonoBehaviour
         if (currentVelocity.magnitude >= maxSpeed)
         {
             Debug.Log("magnitude : " + currentVelocity.magnitude);
+            rigidbody.linearVelocity = Vector3.ClampMagnitude(currentVelocity, maxSpeed);
         }
     }
 
     public void SwitchMovementPhase(MoveState state)
     {
-        currentState = state;
+        currentMoveState = state;
+        Debug.Log("currentState : " + currentMoveState);
+        switch (state)
+        {
+            case MoveState.Push: SwitchedToPushPhase(); break;
+            case MoveState.Pull: SwitchedToPullPhase(); break;
+            case MoveState.Recovery: SwitchedToRecoveryPhase(); break;
+        }
     }
 
     public void SwitchedToPushPhase()
@@ -264,13 +273,18 @@ public class SwimmingPhysicsTest : MonoBehaviour
     public void SwitchedToPullPhase()
     {
         applyPropulsionForce = true;
+        StartAnimation();
     }
     public void SwitchedToRecoveryPhase()
     {
         applyPropulsionForce = false;
+        ResetAnimation();
+
     }
     public void SwitchedToGlidePhase()
     {
 
     }
+
+
 }
