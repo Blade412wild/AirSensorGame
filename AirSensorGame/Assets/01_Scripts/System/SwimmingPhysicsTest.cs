@@ -1,4 +1,5 @@
 using UnityEngine;
+using static UnityEngine.XR.Interaction.Toolkit.Inputs.Haptics.HapticsUtility;
 
 public class SwimmingPhysicsTest : MonoBehaviour
 {
@@ -62,6 +63,12 @@ public class SwimmingPhysicsTest : MonoBehaviour
     private bool inAnimation = false;
     private bool lastPhysicsUpdate;
     private MoveState currentMoveState;
+    private Vector3 previousMoveDir;
+    private Quaternion previousRotation;
+    private Vector3 currentMoveDir;
+    private Quaternion currentRotation;
+
+    private bool firstMovementAfterIdle = false;
 
 
 
@@ -120,12 +127,13 @@ public class SwimmingPhysicsTest : MonoBehaviour
                 //ApplyKick();
             }
         }
-
+        SetMoveDir();
 
     }
 
     private void FixedUpdate()
     {
+        SetCurrentMoveRotation();
         currentMoveVelocity = (transform.position - previousPos) / Time.deltaTime;
         OwnCalculatedVelocity = currentMoveVelocity;
         RigidbodyCalculatedVelocity = rigidbody.GetPointVelocity(transform.position);
@@ -178,12 +186,12 @@ public class SwimmingPhysicsTest : MonoBehaviour
 
     private void ApplyForce(float force)
     {
-        rigidbody.AddForce(headTransform.forward * force, forceMode);
+        rigidbody.AddForce(currentMoveDir * force, forceMode);
     }
 
     private void ApplyKick()
     {
-        rigidbody.AddForce(headTransform.forward * kickForce, ForceMode.Impulse);
+        rigidbody.AddForce(currentMoveDir * kickForce, ForceMode.Impulse);
     }
 
     private void ResetAnimation()
@@ -272,6 +280,8 @@ public class SwimmingPhysicsTest : MonoBehaviour
     }
     public void SwitchedToPullPhase()
     {
+        SetMoveDir();
+        SetCurrentMoveRotation();
         applyPropulsionForce = true;
         StartAnimation();
     }
@@ -284,6 +294,52 @@ public class SwimmingPhysicsTest : MonoBehaviour
     public void SwitchedToGlidePhase()
     {
 
+    }
+
+    private void SetMoveDir()
+    {
+        if (currentMoveDir != Vector3.zero)
+        {
+            previousMoveDir = currentMoveDir;
+        }
+        currentMoveDir = headTransform.forward;
+    }
+
+    private void SetCurrentMoveRotation()
+    {
+        //if (currentRotation != )
+        //{
+        //    previousRotation = currentRotation;
+        //}
+
+        currentRotation = GetCurrentXYRotation();
+        transform.rotation = currentRotation;
+
+    }
+
+    private Quaternion GetCurrentXYRotation()
+    {
+        // Get controller orientation
+        Quaternion q = headTransform.rotation;
+
+        // Extract forward and up vectors from the controller
+        
+        //Vector3 fwd = q * headTransform.forward;
+        //Vector3 up = q * headTransform.up;
+
+        // Project both onto planes so Z-rotation is removed
+        //fwd.z = 0;  // Keep yaw
+        //up.z = 0;   // Keep pitch
+
+        //fwd.Normalize();
+        //up.Normalize();
+
+        // Build a corrected rotation with no roll (Z)
+        //Quaternion noZ = Quaternion.LookRotation(fwd, up);
+        return q;
+
+        // Apply it to the reference
+        //transform.rotation = noZ;
     }
 
 

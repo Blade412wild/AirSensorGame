@@ -4955,7 +4955,7 @@ Transform:
   m_GameObject: {fileID: 1782702501601814112}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.399, y: -1.6234363, z: -8.673023}
+  m_LocalPosition: {x: -2.399, y: -1.6234363, z: -10.818}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -5068,6 +5068,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1438546959447981274}
   - component: {fileID: 4540229000371508671}
+  - component: {fileID: 4540229000371508675}
   - component: {fileID: 4540229000371508673}
   - component: {fileID: 4540229000371508672}
   - component: {fileID: 4540229000371508674}
@@ -7012,7 +7013,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   rigidbody: {fileID: 4540229000371508673}
-  headTransform: {fileID: 1438546959447981274}
+  headTransform: {fileID: 724782711}
   pushPhase: {x: 0, y: 0.5}
   glidePhase: {x: 0, y: 0}
   pullPhase: {x: 0.5, y: 1.25}
@@ -7062,7 +7063,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   animationDuration: 0.9
-  maxSpeed: 0.5
+  maxSpeed: 1
   kickForce: 30
   baseDrag: 65
   pushMultiplier: 1
@@ -7154,6 +7155,29 @@ MonoBehaviour:
   - {fileID: 8300000, guid: c43af6dcd05953f479438426c1bf5990, type: 3}
   audioSteps: 0000000001000000000000000100000002000000010000000000000002000000010000000000000002000000
   playSound: 0
+--- !u!136 &4540229000371508675
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1782702501601814112}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.30750114
+  m_Height: 1.0987539
+  m_Direction: 2
+  m_Center: {x: 0.004999757, y: 0.7818722, z: 0.14999914}
 --- !u!4 &4548762039600130478
 Transform:
   m_ObjectHideFlags: 0
