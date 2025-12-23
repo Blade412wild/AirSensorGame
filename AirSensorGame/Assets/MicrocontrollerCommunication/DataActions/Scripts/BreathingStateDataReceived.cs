@@ -7,7 +7,7 @@ public class BreathingStateDataReceived : DataAction
         try
         {
             int index = int.Parse(value);
-            data.BreathingState = (BreathingDeviceData.breathingState)index;
+            data.BreathingState = (BreathingState)index;
         }
         catch (System.Exception ex)
         {

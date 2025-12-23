@@ -1,0 +1,1 @@
+﻿public enum MoveState { Idle, Push, Pull, Glide, Recovery }

@@ -9,6 +9,7 @@ public class MicrocontrollerManager : MonoBehaviour
 
     public bool TryToConnect;
     public string message;
+    public bool sendMessage;
     public bool parse;
     public static SerialPort SerialPort { get; private set; }
 
@@ -36,6 +37,12 @@ public class MicrocontrollerManager : MonoBehaviour
         {
             TryToFindNewPort();
             TryToConnect = false;
+        }
+
+        if (sendMessage)
+        {
+            sendMessage = false;
+            SerialPort.Write(message);
         }
     }
 

@@ -35,7 +35,7 @@ public class DebugStatePanel : MonoBehaviour
 
     }
 
-    private void HandleChangeMovementStateEvent(SchoolslagDetection.MoveState state)
+    private void HandleChangeMovementStateEvent(MoveState state)
     {
         StateText.text = state.ToString();
     }

@@ -7,7 +7,6 @@ public class SchoolslagDetection : MonoBehaviour
 {
 
     public event Action<MoveState> ChangedMoveStateEvent;
-    public enum MoveState { Idle, Push, Pull, Glide, Recovery }
     [Space]
     [Header("Pushing Parameters")]
 
@@ -153,6 +152,7 @@ public class SchoolslagDetection : MonoBehaviour
 
         if (DetectIfGliding())
         {
+
             ChangeState(MoveState.Glide);
         }
 
