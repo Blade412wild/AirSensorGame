@@ -46,6 +46,17 @@ public class MicrocontrollerManager : MonoBehaviour
         }
     }
 
+    public void SendMessage(string message)
+    {
+        if (SerialPortIsOpen)
+        {
+            SerialPort.Write(message);
+        }
+        else
+        {
+            Debug.LogWarning("SerialPort is closed");
+        }
+    }
 
     public void TryToFindNewPort()
     {

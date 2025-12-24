@@ -226,7 +226,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.xr.management": {
-      "version": "4.5.3",
+      "version": "4.5.4",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -238,7 +238,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.xr.openxr": {
-      "version": "1.16.0",
+      "version": "1.15.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -254,14 +254,6 @@
       "depth": 0,
       "source": "builtin",
       "dependencies": {}
-    },
-    "com.unity.modules.adaptiveperformance": {
-      "version": "1.0.0",
-      "depth": 0,
-      "source": "builtin",
-      "dependencies": {
-        "com.unity.modules.subsystems": "1.0.0"
-      }
     },
     "com.unity.modules.ai": {
       "version": "1.0.0",
