@@ -109,6 +109,15 @@ public partial class @SimpleInputAction: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""WASD"",
+                    ""type"": ""Value"",
+                    ""id"": ""58269724-1e0e-4c6b-b92c-4f5acdde11fb"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -188,6 +197,116 @@ public partial class @SimpleInputAction: IInputActionCollection2, IDisposable
                     ""action"": ""LEFTRight"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""Arrows"",
+                    ""id"": ""6c781431-9ca7-4b01-8037-36dd22e44630"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""WASD"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""87d3ef5d-b79a-4291-befb-562bdfe3766e"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""WASD"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""c788ea32-edb4-4477-b0b9-6320797152c2"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""WASD"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""1f7864ab-a6d7-4994-b11d-d5f8d76277f9"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""WASD"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""4a9b3a74-c485-4c8d-9cf2-fba5f879bb2a"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""WASD"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""WASD"",
+                    ""id"": ""6fbe180c-ccf6-4715-a3ff-c0f72f793155"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""WASD"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""cdb56a15-0d04-4467-80d0-7f2310a308fb"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""WASD"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""86d97455-2551-4e1b-b2f1-152f7f38386e"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""WASD"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""5f971735-7571-4580-a6cf-e69ff3614006"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""WASD"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""4a461aa3-4f19-4414-bfc5-e15f8eeebdaa"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""WASD"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         }
@@ -198,6 +317,7 @@ public partial class @SimpleInputAction: IInputActionCollection2, IDisposable
         m_Laptop = asset.FindActionMap("Laptop", throwIfNotFound: true);
         m_Laptop_SpaceBar = m_Laptop.FindAction("SpaceBar", throwIfNotFound: true);
         m_Laptop_LEFTRight = m_Laptop.FindAction("LEFTRight", throwIfNotFound: true);
+        m_Laptop_WASD = m_Laptop.FindAction("WASD", throwIfNotFound: true);
     }
 
     ~@SimpleInputAction()
@@ -280,6 +400,7 @@ public partial class @SimpleInputAction: IInputActionCollection2, IDisposable
     private List<ILaptopActions> m_LaptopActionsCallbackInterfaces = new List<ILaptopActions>();
     private readonly InputAction m_Laptop_SpaceBar;
     private readonly InputAction m_Laptop_LEFTRight;
+    private readonly InputAction m_Laptop_WASD;
     /// <summary>
     /// Provides access to input actions defined in input action map "Laptop".
     /// </summary>
@@ -299,6 +420,10 @@ public partial class @SimpleInputAction: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Laptop/LEFTRight".
         /// </summary>
         public InputAction @LEFTRight => m_Wrapper.m_Laptop_LEFTRight;
+        /// <summary>
+        /// Provides access to the underlying input action "Laptop/WASD".
+        /// </summary>
+        public InputAction @WASD => m_Wrapper.m_Laptop_WASD;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -331,6 +456,9 @@ public partial class @SimpleInputAction: IInputActionCollection2, IDisposable
             @LEFTRight.started += instance.OnLEFTRight;
             @LEFTRight.performed += instance.OnLEFTRight;
             @LEFTRight.canceled += instance.OnLEFTRight;
+            @WASD.started += instance.OnWASD;
+            @WASD.performed += instance.OnWASD;
+            @WASD.canceled += instance.OnWASD;
         }
 
         /// <summary>
@@ -348,6 +476,9 @@ public partial class @SimpleInputAction: IInputActionCollection2, IDisposable
             @LEFTRight.started -= instance.OnLEFTRight;
             @LEFTRight.performed -= instance.OnLEFTRight;
             @LEFTRight.canceled -= instance.OnLEFTRight;
+            @WASD.started -= instance.OnWASD;
+            @WASD.performed -= instance.OnWASD;
+            @WASD.canceled -= instance.OnWASD;
         }
 
         /// <summary>
@@ -402,5 +533,12 @@ public partial class @SimpleInputAction: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnLEFTRight(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "WASD" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnWASD(InputAction.CallbackContext context);
     }
 }
