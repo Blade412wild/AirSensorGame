@@ -630,7 +630,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   leftControllerStickRef: {fileID: 968182167}
   rightControllerStickRef: {fileID: 41842327}
-  horizontalRotationSpeed: 60
+  horizontalRotationSpeed: 84
   verticalRotationSpeed: 60
 --- !u!4 &834799469
 Transform:
@@ -646,7 +646,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 215160762}
-  m_Father: {fileID: 965456189}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &961880897
 GameObject:
@@ -795,6 +795,7 @@ GameObject:
   m_Component:
   - component: {fileID: 965456189}
   - component: {fileID: 965456188}
+  - component: {fileID: 965456190}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -815,7 +816,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BodyMovement
   moveDir: {x: 0, y: 0, z: 0}
-  bodyPhysics: {fileID: 0}
   cameraTrans: {fileID: 834799469}
   speed: 2
 --- !u!4 &965456189
@@ -831,10 +831,24 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 834799469}
   - {fileID: 287338628}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &965456190
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 965456187}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca0e52b02bc07894fabe8abefd7f5f83, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BodyRotation
+  moveDir: {x: 0, y: 0, z: 0}
+  cameraTrans: {fileID: 834799469}
+  iterations: 2
 --- !u!114 &968182167
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -856,3 +870,4 @@ SceneRoots:
   - {fileID: 961880900}
   - {fileID: 12785596}
   - {fileID: 965456189}
+  - {fileID: 834799469}
