@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEngine.XR.Interaction.Toolkit.Inputs.Haptics.HapticsUtility;
 
@@ -6,6 +7,8 @@ public class SwimmingPhysicsTest : MonoBehaviour
     [Header("Refrences")]
     [SerializeField] private Rigidbody rigidbody;
     [SerializeField] private Transform headTransform;
+    [SerializeField] private SwimControls swimControls;
+    [SerializeField] private Animator animator;
 
     [Space]
     [Header("SwimmingPhases Parameters")]
@@ -85,6 +88,9 @@ public class SwimmingPhysicsTest : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        CheckInput();
+
         if (startForce)
         {
             startForce = false;
@@ -270,16 +276,19 @@ public class SwimmingPhysicsTest : MonoBehaviour
             case MoveState.Push: SwitchedToPushPhase(); break;
             case MoveState.Pull: SwitchedToPullPhase(); break;
             case MoveState.Recovery: SwitchedToRecoveryPhase(); break;
+
         }
     }
 
     public void SwitchedToPushPhase()
     {
+        currentMoveState = MoveState.Push;
         //applyForce = true;
         ApplyKick();
     }
     public void SwitchedToPullPhase()
     {
+        currentMoveState = MoveState.Pull;
         SetMoveDir();
         SetCurrentMoveRotation();
         applyPropulsionForce = true;
@@ -287,14 +296,44 @@ public class SwimmingPhysicsTest : MonoBehaviour
     }
     public void SwitchedToRecoveryPhase()
     {
+        currentMoveState = MoveState.Recovery;
         applyPropulsionForce = false;
         ResetAnimation();
 
     }
     public void SwitchedToGlidePhase()
     {
-
+        currentMoveState = MoveState.Glide;
     }
+
+
+
+    private void SwitchedToIdleState()
+    {
+        currentMoveState = MoveState.Idle;
+        animator.SetBool("Move", false);
+    }
+
+    private void CheckInput()
+    {
+        Vector2 leftInput = swimControls.leftInput;
+        Vector2Int leftInputInt = Vector2Int.zero;
+        leftInputInt.x = Mathf.RoundToInt(leftInput.x);
+        leftInputInt.y = Mathf.RoundToInt(leftInput.y);
+
+        Debug.Log("float : " +  leftInput + " | int : " + leftInputInt);
+
+        if (leftInputInt.y == 1)
+        {
+            animator.SetBool("Move", true);
+        }
+        else if (leftInputInt.y == 0)
+        {
+            SwitchedToIdleState();
+        }
+    }
+
+
 
     private void SetMoveDir()
     {
@@ -323,7 +362,7 @@ public class SwimmingPhysicsTest : MonoBehaviour
         Quaternion q = headTransform.rotation;
 
         // Extract forward and up vectors from the controller
-        
+
         //Vector3 fwd = q * headTransform.forward;
         //Vector3 up = q * headTransform.up;
 

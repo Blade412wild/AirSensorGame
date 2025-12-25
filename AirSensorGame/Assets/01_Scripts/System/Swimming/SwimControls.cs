@@ -23,6 +23,9 @@ public class SwimControls : MonoBehaviour
     private float currentYaw;
     private float currentPitch;
 
+    public Vector2 rightInput { get; private set; }
+    public Vector2 leftInput { get; private set; }
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -34,18 +37,19 @@ public class SwimControls : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector2 input = GetStickInput(rightControllerStickRef);
+        rightInput = GetStickInput(rightControllerStickRef);
+        leftInput = GetStickInput(leftControllerStickRef);
 
-        Vector2 horizontalInput = input;
+        Vector2 horizontalInput = rightInput;
         horizontalInput.y = 0;
 
-        Vector2 verticalInput = input;
+        Vector2 verticalInput = rightInput;
         verticalInput.x = 0;
 
         float yawRotationTurnAmount = GetTurnAmount(horizontalInput, horizontalInput.x, horizontalRotationSpeed);
         float pitchRotationTurnAmount = GetTurnAmount(verticalInput, verticalInput.y, verticalRotationSpeed);
 
-        Debug.Log("input : " + input + " | yaw amount : " + yawRotationTurnAmount + " | pitch amount : " + pitchRotationTurnAmount);
+        //Debug.Log("input : " + input + " | yaw amount : " + yawRotationTurnAmount + " | pitch amount : " + pitchRotationTurnAmount);
 
         TurnRigHorizontal(yawRotationTurnAmount);
         TurnRigVertical(pitchRotationTurnAmount);

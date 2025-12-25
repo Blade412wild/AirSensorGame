@@ -15,6 +15,6 @@ public class CameraBehaviour : MonoBehaviour
     {
         this.transform.position = targetTransform.position;
         //this.transform.rotation = targetTransform.rotation;
-        
     }
+    
 }

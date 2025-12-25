@@ -6,6 +6,7 @@ public class settingYOffset : MonoBehaviour
 
    [SerializeField] private XROrigin origin;
     [SerializeField] private Transform cameraTransform;
+    [SerializeField] private Transform cameraOffset;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -17,6 +18,9 @@ public class settingYOffset : MonoBehaviour
     void Update()
     {
         if(origin == null || cameraTransform == null) return;
-        origin.CameraYOffset = cameraTransform.localPosition.y * -1;
+        Vector3 newOffset = cameraTransform.localPosition * -1;
+        //newOffset.x = 0;
+        //newOffset.z = 0;
+        cameraOffset.localPosition = newOffset;
     }
 }
