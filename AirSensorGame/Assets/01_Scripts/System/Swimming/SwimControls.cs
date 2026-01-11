@@ -9,9 +9,15 @@ public class SwimControls : MonoBehaviour
     [SerializeField] private InputActionReference rightControllerStickRef;
 
     [Space]
+    [SerializeField] private InputActionReference WASDInput;
+    [SerializeField] private InputActionReference SpaceInput;
+
+
+    [Space]
     [Header("Parameters")]
     [SerializeField] private float horizontalRotationSpeed;
     [SerializeField] private float verticalRotationSpeed;
+    [SerializeField] private bool useKeboard = false;
 
     private Vector3 horizontalDir;
     private Vector3 verticalDir;
@@ -25,6 +31,9 @@ public class SwimControls : MonoBehaviour
 
     public Vector2 rightInput { get; private set; }
     public Vector2 leftInput { get; private set; }
+    public Vector2Int rightInputInt => ConvertToVector2Int(rightInput);
+    public Vector2Int leftInputInt => ConvertToVector2Int(leftInput);
+
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -32,13 +41,34 @@ public class SwimControls : MonoBehaviour
     {
         leftControllerStickRef.action.Enable();
         rightControllerStickRef.action.Enable();
+
+        WASDInput.action.Enable();
+        SpaceInput.action.Enable();
     }
 
     // Update is called once per frame
     void Update()
     {
-        rightInput = GetStickInput(rightControllerStickRef);
-        leftInput = GetStickInput(leftControllerStickRef);
+        if (useKeboard)
+        {
+            rightInput = GetStickInput(rightControllerStickRef);
+            leftInput = GetStickInput(leftControllerStickRef);
+        }
+        else
+        {
+            rightInput = GetStickInput(WASDInput);
+
+            if (SpaceInput.action.IsPressed())
+            {
+                leftInput = Vector2.up;
+            }
+            else
+            {
+                leftInput = Vector2.zero;
+            }
+        }
+
+
 
         Vector2 horizontalInput = rightInput;
         horizontalInput.y = 0;
@@ -61,7 +91,7 @@ public class SwimControls : MonoBehaviour
         Vector2 input = reference.action.ReadValue<Vector2>();
         return input;
     }
-    private float GetTurnAmount(Vector2 input, float axis , float speed)
+    private float GetTurnAmount(Vector2 input, float axis, float speed)
     {
         float turnAmount = input.magnitude * (Mathf.Sign(axis) * speed * Time.deltaTime);
         return turnAmount;
@@ -91,4 +121,15 @@ public class SwimControls : MonoBehaviour
     {
         transform.rotation = Quaternion.Euler(currentPitch, currentYaw, 0f);
     }
+
+
+    public Vector2Int ConvertToVector2Int(Vector2 vector) {
+
+        Vector2Int vector2Int = Vector2Int.zero;
+        vector2Int.x = Mathf.RoundToInt(vector.x);
+        vector2Int.y = Mathf.RoundToInt(vector.y);
+        return vector2Int;
+
+    }
+
 }

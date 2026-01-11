@@ -1,6 +1,4 @@
-using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEngine.XR.Interaction.Toolkit.Inputs.Haptics.HapticsUtility;
 
 public class SwimmingPhysicsTest : MonoBehaviour
 {
@@ -59,6 +57,8 @@ public class SwimmingPhysicsTest : MonoBehaviour
     [SerializeField] private Vector3 OwnCalculatedVelocity;
     [SerializeField] private Vector3 RigidbodyCalculatedVelocity;
 
+    public Rigidbody PlayerRidigBody => rigidbody;
+
     private bool applyPropulsionForce;
     private Vector3 currentMoveVelocity;
     private Vector3 previousPos;
@@ -72,6 +72,8 @@ public class SwimmingPhysicsTest : MonoBehaviour
     private Quaternion currentRotation;
 
     private bool firstMovementAfterIdle = false;
+
+    private bool mayUpdate = true;
 
 
 
@@ -88,7 +90,7 @@ public class SwimmingPhysicsTest : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if (!mayUpdate) return;
         CheckInput();
 
         if (startForce)
@@ -127,7 +129,7 @@ public class SwimmingPhysicsTest : MonoBehaviour
             {
                 Animationprogess = animationDuration;
 
-                Debug.Log("Animation is done");
+                //Debug.Log("Animation is done");
                 //lastPhysicsUpdate = true;
                 //ResetAnimation();
                 //ApplyKick();
@@ -182,6 +184,17 @@ public class SwimmingPhysicsTest : MonoBehaviour
 
     }
 
+    public void StopMovement()
+    {
+        mayUpdate = false;
+
+    }
+
+    public void ContinueMovement()
+    {
+        mayUpdate = true;
+    }
+
     private void ApplyDrag()
     {
         Vector3 dragDir = (rigidbody.GetPointVelocity(transform.position).normalized * -1);
@@ -202,7 +215,7 @@ public class SwimmingPhysicsTest : MonoBehaviour
 
     private void ResetAnimation()
     {
-        Debug.Log(" reset");
+        //Debug.Log(" reset");
         Animationprogess = 0;
         inAnimation = false;
         //startForce = true;
@@ -262,7 +275,7 @@ public class SwimmingPhysicsTest : MonoBehaviour
 
         if (currentVelocity.magnitude >= maxSpeed)
         {
-            Debug.Log("magnitude : " + currentVelocity.magnitude);
+            //Debug.Log("magnitude : " + currentVelocity.magnitude);
             rigidbody.linearVelocity = Vector3.ClampMagnitude(currentVelocity, maxSpeed);
         }
     }
@@ -270,7 +283,7 @@ public class SwimmingPhysicsTest : MonoBehaviour
     public void SwitchMovementPhase(MoveState state)
     {
         currentMoveState = state;
-        Debug.Log("currentState : " + currentMoveState);
+        //Debug.Log("currentState : " + currentMoveState);
         switch (state)
         {
             case MoveState.Push: SwitchedToPushPhase(); break;
@@ -316,18 +329,11 @@ public class SwimmingPhysicsTest : MonoBehaviour
 
     private void CheckInput()
     {
-        Vector2 leftInput = swimControls.leftInput;
-        Vector2Int leftInputInt = Vector2Int.zero;
-        leftInputInt.x = Mathf.RoundToInt(leftInput.x);
-        leftInputInt.y = Mathf.RoundToInt(leftInput.y);
-
-        Debug.Log("float : " +  leftInput + " | int : " + leftInputInt);
-
-        if (leftInputInt.y == 1)
+        if (swimControls.leftInputInt.y == 1)
         {
             animator.SetBool("Move", true);
         }
-        else if (leftInputInt.y == 0)
+        else if (swimControls.leftInputInt.y == 0)
         {
             SwitchedToIdleState();
         }
