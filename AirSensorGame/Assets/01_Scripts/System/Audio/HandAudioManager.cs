@@ -7,7 +7,6 @@ public class HandAudioManager : MonoBehaviour
 
     [Space]
     [SerializeField] AudioClip[] clips;
-    [SerializeField] private int[] audioSteps;
 
     int counter;
 
@@ -20,7 +19,7 @@ public class HandAudioManager : MonoBehaviour
         rightHand.PlaySound(clip);
     }
 
-    private AudioClip GetAudioClip()
+    public AudioClip GetAudioClip()
     {
         AudioClip clip = null;
 

@@ -31,8 +31,8 @@ public class CalibrationEnviromentSwitch : MonoBehaviour
         swimmingEnviroment.SetActive(false);
         callibrationEnviroment.SetActive(true);
         PlayerMesh.SetActive(false);
-        leftHand.SetActive(false);
-        rightHand.SetActive(false);
+        leftHand.SetActive(true);
+        rightHand.SetActive(true);
     }
 
     private void HandleFinishedCallibrationEvent()
@@ -40,8 +40,8 @@ public class CalibrationEnviromentSwitch : MonoBehaviour
         swimmingEnviroment.SetActive(true);
         callibrationEnviroment.SetActive(false);
         PlayerMesh.SetActive(true);
-        leftHand.SetActive(true);
-        rightHand.SetActive(true);
+        leftHand.SetActive(false);
+        rightHand.SetActive(false);
     }
 
 
