@@ -12,6 +12,7 @@ public class SwimmingMananger : MonoBehaviour
     [SerializeField] private bool mayUpdate;
     private bool inTransition = false;
     private bool inAnimation = false;
+    private float speed;
 
     private void Start()
     {
@@ -41,7 +42,19 @@ public class SwimmingMananger : MonoBehaviour
 
         Vector3 dir = Vector3.up;
         Vector3 animationEndPoint = emergePoint.GetEmergePoint(dir);
-        StartAnimation(animationEndPoint, dir, playerSwimPhysis.PlayerRidigBody.linearVelocity.magnitude);
+
+        Debug.Log("player speed : " + playerSwimPhysis.PlayerRidigBody.linearVelocity.magnitude);
+
+        if (playerSwimPhysis.PlayerRidigBody.linearVelocity.magnitude < 1.5)
+        {
+            speed = 1.5f;
+        }
+        else
+        {
+            speed = playerSwimPhysis.PlayerRidigBody.linearVelocity.magnitude;
+        }
+
+        StartAnimation(animationEndPoint, dir, speed);
 
     }
 
@@ -74,11 +87,11 @@ public class SwimmingMananger : MonoBehaviour
         inAnimation = false;
         waterTopCollider.enabled = true;
 
-        if(dir == Vector3.up)
+        if (dir == Vector3.up)
         {
 
         }
-        else if(dir == Vector3.down)
+        else if (dir == Vector3.down)
         {
             playerSwimPhysis.ContinueMovement();
         }

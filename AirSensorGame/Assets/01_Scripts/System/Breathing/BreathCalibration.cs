@@ -1,9 +1,12 @@
+using System;
 using System.Resources;
 using UnityEditor;
 using UnityEngine;
 
 public class BreathCalibration : MonoBehaviour
 {
+    public event Action StartCalibrationEvent;
+    public event Action FinishedCalibrationEvent;
 
     [SerializeField] private MicrocontrollerManager microcontrollerManager;
     [SerializeField] private BreathingDeviceData data;
@@ -18,6 +21,8 @@ public class BreathCalibration : MonoBehaviour
     [SerializeField] private CalibrationState state = CalibrationState.Idle;
     [SerializeField] private bool isCalibrating;
     [SerializeField] private bool nexState;
+    [SerializeField] private bool starrtWithCalibration;
+
 
     private float minFloatRange = 0;
     private float maxFloatRange = 100;
@@ -27,6 +32,7 @@ public class BreathCalibration : MonoBehaviour
     {
         leftLungTransform.localScale = min;
         rightLungTransform.localScale = min;
+        microcontrollerManager.MicrocontollerActivatedEvent += HandleMicrocontrollerActivatedEvent;
     }
 
     private void Update()
@@ -39,6 +45,8 @@ public class BreathCalibration : MonoBehaviour
         }
         if (!isCalibrating) return;
         SettingStates();
+
+
     }
 
     private void SettingStates()
@@ -79,13 +87,16 @@ public class BreathCalibration : MonoBehaviour
 
     private void StartCalibration()
     {
-        state = CalibrationState.SettingMin;
+        StartCalibrationEvent?.Invoke();
+        GoToNextState();
+        microcontrollerManager.SendMessage("2");
         isCalibrating = true;
     }
 
     private void GoToMinState()
     {
         state = CalibrationState.SettingMin;
+
     }
 
     private void GoToMaxState()
@@ -130,7 +141,15 @@ public class BreathCalibration : MonoBehaviour
     {
         counter = -1; // is because nextstate does ++ before switch
         isCalibrating = false;
+        FinishedCalibrationEvent?.Invoke();
         GoToNextState();
+    }
+    private void HandleMicrocontrollerActivatedEvent()
+    {
+        if (starrtWithCalibration)
+        {
+            StartCalibration();
+        }
     }
 
 }

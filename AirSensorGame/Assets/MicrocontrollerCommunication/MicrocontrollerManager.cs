@@ -2,10 +2,14 @@
 using System.IO.Ports;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MicrocontrollerManager : MonoBehaviour
 {
 
+    public event Action MicrocontollerActivatedEvent;
+    public event Action StartCallibrationEvent;
+    public event Action FinishedCallibrationEvent;
 
     public bool TryToConnect;
     public string message;
@@ -19,15 +23,23 @@ public class MicrocontrollerManager : MonoBehaviour
     [SerializeField] private float portSwitchInterval = 250; // ms
     [SerializeField] private BreathingDeviceCommmunicationParserList parserList;
     [SerializeField] private BreathingDeviceData data;
+    [SerializeField] private BreathCalibration calibration;
 
     private SerialPortFinder portFinder;
     private Thread microControllerThread;
     private MessageParser messageParser;
     private bool tryReadingData = false;
 
+    private bool activatedMicrocontroller;
+
     public void Awake()
     {
         messageParser = new MessageParser(parserList);
+    }
+    private void Start()
+    {
+        calibration.StartCalibrationEvent += () => StartCallibrationEvent?.Invoke();
+        calibration.FinishedCalibrationEvent += () => FinishedCallibrationEvent?.Invoke();
     }
 
     private void Update()
@@ -39,10 +51,29 @@ public class MicrocontrollerManager : MonoBehaviour
             TryToConnect = false;
         }
 
+        if (activatedMicrocontroller && SerialPortIsOpen)
+        {
+            activatedMicrocontroller = false;
+            MicrocontollerActivatedEvent?.Invoke();
+        }
+
         if (sendMessage)
         {
             sendMessage = false;
             SerialPort.Write(message);
+        }
+    }
+    private void OnDisable()
+    {
+        CloseMicrocontrollerThread();
+
+        calibration.StartCalibrationEvent -= () => StartCallibrationEvent?.Invoke();
+        calibration.FinishedCalibrationEvent -= () => FinishedCallibrationEvent?.Invoke();
+
+
+        if (portFinder != null)
+        {
+            portFinder.OnDisable();
         }
     }
 
@@ -145,6 +176,7 @@ public class MicrocontrollerManager : MonoBehaviour
         microControllerThread = new Thread(HandleMicrocontrollerInput);
         tryReadingData = true;
         microControllerThread.Start();
+        activatedMicrocontroller = true;
     }
 
     private void CloseMicrocontrollerThread()
@@ -157,15 +189,6 @@ public class MicrocontrollerManager : MonoBehaviour
 
     }
 
-    private void OnDisable()
-    {
-        CloseMicrocontrollerThread();
-
-        if (portFinder != null)
-        {
-            portFinder.OnDisable();
-        }
-    }
 
 }
 
