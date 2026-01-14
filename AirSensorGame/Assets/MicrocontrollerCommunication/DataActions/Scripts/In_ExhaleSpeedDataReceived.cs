@@ -4,7 +4,7 @@ public class In_ExhaleSpeedDataReceived : DataAction
 
     public override void OnDataReceived(string value)
     {
-        Debug.Log(value);
+        //Debug.Log(value);
         try
         {
             data.inExhaleSpeed = float.Parse(value);

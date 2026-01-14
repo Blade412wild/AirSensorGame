@@ -49,6 +49,21 @@ public class BreathCalibration : MonoBehaviour
 
     }
 
+    private void OnDisable()
+    {
+        microcontrollerManager.MicrocontollerActivatedEvent -= HandleMicrocontrollerActivatedEvent;
+    }
+
+    public void ButtonPressNextState()
+    {
+        GoToNextState();
+    }
+
+    public void StartCalibrtationButton()
+    {
+        StartCalibration();
+    }
+
     private void SettingStates()
     {
         switch (state)
@@ -80,6 +95,7 @@ public class BreathCalibration : MonoBehaviour
 
     private void InReviewingState()
     {
+        progress = data.chestPostion;
         Vector3 newScale = ScaleUtils.ScaleFromFloatRange(progress, minFloatRange, maxFloatRange, min, max);
         leftLungTransform.localScale = newScale;
         rightLungTransform.localScale = newScale;
@@ -89,7 +105,6 @@ public class BreathCalibration : MonoBehaviour
     {
         StartCalibrationEvent?.Invoke();
         GoToNextState();
-        microcontrollerManager.SendMessage("2");
         isCalibrating = true;
     }
 
@@ -114,11 +129,11 @@ public class BreathCalibration : MonoBehaviour
         state = CalibrationState.Idle;
     }
      
-    private void RestartCalibration()
+    public void RestartCalibration()
     {
-        counter = 0;    
+        counter = -1;    
         StartCalibration();
-        microcontrollerManager.SendMessage("4");
+        microcontrollerManager.SendMessage("2");
 
     }
 
@@ -148,7 +163,7 @@ public class BreathCalibration : MonoBehaviour
     {
         if (starrtWithCalibration)
         {
-            StartCalibration();
+            //StartCalibration();
         }
     }
 

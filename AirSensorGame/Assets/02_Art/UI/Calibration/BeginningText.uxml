@@ -1,0 +1,6 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement style="flex-grow: 1; background-color: rgba(0, 0, 0, 0.75); color: rgb(255, 255, 255); padding-left: 10px; padding-top: 10px; padding-right: 10px; padding-bottom: 10px; font-size: 18px;">
+        <ui:Label text="Calibration" style="font-size: 64px; -unity-text-align: middle-center; -unity-font-style: bold; white-space: pre-wrap;"/>
+        <ui:Label text="Welcome to the calibration, Click on the button to begin the setup" style="flex-wrap: wrap; max-width: 100%; white-space: normal; font-size: 24px;"/>
+    </ui:VisualElement>
+</ui:UXML>

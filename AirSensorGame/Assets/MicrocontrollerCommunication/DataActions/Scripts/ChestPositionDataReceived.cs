@@ -5,7 +5,7 @@ public class ChestPositionDataReceived : DataAction
 
     public override void OnDataReceived(string value)
     {
-        Debug.Log(value);
+        //Debug.Log(value);
         try
         {
             data.chestPostion = float.Parse(value);

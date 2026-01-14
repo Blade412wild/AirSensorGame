@@ -60,7 +60,7 @@ public class MicrocontrollerManager : MonoBehaviour
         if (sendMessage)
         {
             sendMessage = false;
-            SerialPort.Write(message);
+            SendMessage(message);
         }
     }
     private void OnDisable()
@@ -81,6 +81,7 @@ public class MicrocontrollerManager : MonoBehaviour
     {
         if (SerialPortIsOpen)
         {
+            Debug.Log("Send message: " +  message);
             SerialPort.Write(message);
         }
         else
