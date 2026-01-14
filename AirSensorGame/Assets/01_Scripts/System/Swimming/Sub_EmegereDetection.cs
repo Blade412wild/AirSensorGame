@@ -64,7 +64,7 @@ public class Sub_EmegereDetection : MonoBehaviour
     private bool orientationAngleCorrectAndMoving(float minAngle, Vector3 refrenceAngle)
     {
         float currentAngle = Vector3.Angle(orientation.forward, refrenceAngle);
-        Debug.Log("currentAngle : " + currentAngle);
+        //Debug.Log("currentAngle : " + currentAngle);
         if (currentAngle <= minAngle && swimControls.leftInputInt == Vector2.up) return true;
         return false;
 

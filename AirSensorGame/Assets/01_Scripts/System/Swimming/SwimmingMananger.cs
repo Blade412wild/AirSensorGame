@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class SwimmingMananger : MonoBehaviour
@@ -16,6 +17,7 @@ public class SwimmingMananger : MonoBehaviour
     {
         sub_EmegereDetection.PlayerEmergeEvent += HandlePlayerEmergeEvent;
         sub_EmegereDetection.PlayerSubmergeEvent += HandlePlayerSubmergeEvent;
+        animator.AnimationFinishedEvent += HandleAnimationEventFinished;
     }
 
     private void Update()
@@ -34,17 +36,22 @@ public class SwimmingMananger : MonoBehaviour
     private void HandlePlayerEmergeEvent()
     {
         Debug.Log("emerge");
-        inAnimation = true;
-        Vector3 animationEndPoint = emergePoint.GetEmergePoint();
-        waterTopCollider.enabled = false;
-        animator.SetAnimation(playerTransform, animationEndPoint, playerSwimPhysis.PlayerRidigBody.linearVelocity.magnitude);
-        animator.StartAnimation();
+
+        playerSwimPhysis.StopMovement();
+
+        Vector3 dir = Vector3.up;
+        Vector3 animationEndPoint = emergePoint.GetEmergePoint(dir);
+        StartAnimation(animationEndPoint, dir, playerSwimPhysis.PlayerRidigBody.linearVelocity.magnitude);
 
     }
 
     private void HandlePlayerSubmergeEvent()
     {
         Debug.Log("Subemerge");
+
+        Vector3 dir = Vector3.down;
+        Vector3 animationEndPoint = emergePoint.GetEmergePoint(dir);
+        StartAnimation(animationEndPoint, dir, 2);
 
     }
 
@@ -58,6 +65,35 @@ public class SwimmingMananger : MonoBehaviour
         {
             return false;
         }
+    }
+
+    private void HandleAnimationEventFinished(Vector3 dir)
+    {
+        Debug.Log("Aniation Finished");
+
+        inAnimation = false;
+        waterTopCollider.enabled = true;
+
+        if(dir == Vector3.up)
+        {
+
+        }
+        else if(dir == Vector3.down)
+        {
+            playerSwimPhysis.ContinueMovement();
+        }
+
+    }
+
+    private void StartAnimation(Vector3 animationEndPoint, Vector3 dir, float speed)
+    {
+        Debug.Log("Start Animation");
+        inAnimation = true;
+        waterTopCollider.enabled = false;
+        animator.SetAnimation(playerTransform, animationEndPoint, speed, dir);
+        playerSwimPhysis.PlayerRidigBody.linearVelocity = Vector3.zero;
+        animator.StartAnimation();
+
     }
 
 }

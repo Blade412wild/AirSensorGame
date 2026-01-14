@@ -142,6 +142,7 @@ public class SwimmingPhysicsTest : MonoBehaviour
     private void FixedUpdate()
     {
         SetCurrentMoveRotation();
+        if (!mayUpdate) return;
         currentMoveVelocity = (transform.position - previousPos) / Time.deltaTime;
         OwnCalculatedVelocity = currentMoveVelocity;
         RigidbodyCalculatedVelocity = rigidbody.GetPointVelocity(transform.position);
@@ -187,12 +188,15 @@ public class SwimmingPhysicsTest : MonoBehaviour
     public void StopMovement()
     {
         mayUpdate = false;
+        animator.SetBool("Move", false);
+
 
     }
 
     public void ContinueMovement()
     {
         mayUpdate = true;
+        
     }
 
     private void ApplyDrag()
